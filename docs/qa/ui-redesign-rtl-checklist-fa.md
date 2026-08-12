@@ -25,7 +25,7 @@
 | REG-01 | تست | `php artisan test` بدون خطا اجرا می‌شود. | موفق — ۳۸ تست و ۱۵۳ assertion |
 | REG-02 | کیفیت PHP | Pint، Composer validate/audit و `git diff --check` موفق هستند. | موفق — Pint روی ۱۲۷ فایل، Composer validate/audit و diff check |
 | REG-03 | build | Blade view cache و Vite build موفق هستند. | موفق — Blade cache و Vite build؛ هشدار مسیر public فونت در build غیرمسدودکننده و فایل‌ها موجودند |
-| REG-04 | Smoke Test | نصب از ZIP تمیز با Composer بدون dev، APP_KEY، migration و optimize:clear موفق است. | نسخهٔ جاری install smoke داشت؛ Release جدید پس از package باید مجدداً smoke شود |
+| REG-04 | Smoke Test | نصب از ZIP تمیز با Composer بدون dev، APP_KEY، migration و optimize:clear موفق است. | موفق — ZIP خام بدون vendor/node_modules/.env، Composer no-dev، Laravel 12.66.0، APP_KEY، migration، optimize:clear و view cache |
 
 ## ماتریس نقش‌ها
 
