@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTreatmentPlanRequest;
+use App\Models\DentalChartEntry;
 use App\Models\TreatmentCatalog;
 use App\Models\TreatmentPlan;
 use App\Models\TreatmentStageDefinition;
 use App\Support\AuditLogger;
 use App\Support\TenantContext;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -22,7 +24,7 @@ final class TreatmentPlanController extends Controller
         private readonly AuditLogger $auditLogger,
     ) {}
 
-    public function create(int $patientId): View
+    public function create(Request $request, int $patientId): View
     {
         $tenant = $this->tenantContext->require();
         $patient = $tenant->patients()->findOrFail($patientId);
@@ -38,7 +40,12 @@ final class TreatmentPlanController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('treatment-plans.create', compact('tenant', 'patient', 'stages', 'treatments'));
+        $toothCode = trim((string) $request->query('tooth', ''));
+        $surfaceCode = trim((string) $request->query('surface', 'all'));
+        $prefillTooth = in_array($toothCode, DentalChartEntry::allToothCodes(), true) ? $toothCode : null;
+        $prefillSurface = in_array($surfaceCode, DentalChartEntry::SURFACES, true) ? $surfaceCode : 'all';
+
+        return view('treatment-plans.create', compact('tenant', 'patient', 'stages', 'treatments', 'prefillTooth', 'prefillSurface'));
     }
 
     public function store(StoreTreatmentPlanRequest $request): RedirectResponse

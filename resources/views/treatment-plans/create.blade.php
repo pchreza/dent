@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => 'ایجاد طرح درمان'])
 
 @section('content')
-@php($existingItems = old('items', [['stage_id' => '', 'treatment_id' => '', 'tooth_code' => '', 'surface_code' => '', 'status' => 'planned', 'priority' => 'normal', 'estimated_cost' => '', 'planned_on' => '', 'notes' => '']]))
+@php($existingItems = old('items', [['stage_id' => '', 'treatment_id' => '', 'tooth_code' => $prefillTooth ?? '', 'surface_code' => $prefillSurface ?? 'all', 'status' => 'planned', 'priority' => 'normal', 'estimated_cost' => '', 'planned_on' => '', 'notes' => '']]))
 <div class="page-header">
     <div>
         <span class="eyebrow">{{ $tenant->name }} · پروندهٔ {{ $patient->patient_no }}</span>
@@ -27,6 +27,10 @@
             <div class="field field--wide"><label for="plan-notes">یادداشت کلی</label><textarea id="plan-notes" name="notes" rows="3">{{ old('notes') }}</textarea></div>
         </div>
     </section>
+
+    @if ($prefillTooth)
+        <div class="status-message status-message--info">آیتم نخست از نمودار دندان آماده شده است: <bdi dir="ltr">FDI {{ $prefillTooth }}</bdi> · {{ \App\Support\DentalToothPresenter::surfaceLabel($prefillSurface) }}</div>
+    @endif
 
     <section class="card" aria-labelledby="treatment-items-title">
         <div class="section-heading">

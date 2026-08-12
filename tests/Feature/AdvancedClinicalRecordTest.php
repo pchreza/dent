@@ -13,6 +13,7 @@ use App\Models\TreatmentPlan;
 use App\Models\TreatmentPlanItem;
 use App\Models\TreatmentStageDefinition;
 use App\Models\User;
+use App\Support\DentalToothPresenter;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -174,6 +175,85 @@ final class AdvancedClinicalRecordTest extends TestCase
             'to_status' => 'in_progress',
             'reason' => 'شروع درمان',
         ]);
+    }
+
+    public function test_fdi_presenter_describes_anatomical_tooth_in_persian(): void
+    {
+        $tooth = DentalToothPresenter::present('16');
+
+        self::assertSame('آسیای بزرگ اول، فک بالا، سمت راست بیمار', $tooth['display_name']);
+        self::assertSame('FDI 16', $tooth['fdi']);
+        self::assertFalse($tooth['is_primary']);
+        self::assertSame('molar', $tooth['placement']['family']);
+    }
+
+    public function test_chart_defaults_to_active_teeth_and_shows_selected_tooth_journey(): void
+    {
+        $entry = DentalChartEntry::query()->create([
+            'tenant_id' => $this->tenant->id,
+            'patient_id' => $this->patient->id,
+            'tooth_code' => '16',
+            'surface_code' => 'O',
+            'status_code' => 'caries',
+            'note' => 'پوسیدگی سطح جونده',
+            'recorded_by' => $this->manager->id,
+        ]);
+        $stage = TreatmentStageDefinition::query()->where('code', 'implant')->firstOrFail();
+        $plan = TreatmentPlan::query()->create([
+            'tenant_id' => $this->tenant->id,
+            'patient_id' => $this->patient->id,
+            'title' => 'طرح ایمپلنت',
+            'status' => 'active',
+            'created_by' => $this->manager->id,
+            'updated_by' => $this->manager->id,
+        ]);
+        $item = TreatmentPlanItem::query()->create([
+            'tenant_id' => $this->tenant->id,
+            'treatment_plan_id' => $plan->id,
+            'stage_id' => $stage->id,
+            'tooth_code' => '36',
+            'surface_code' => 'all',
+            'status' => 'in_progress',
+            'priority' => 'high',
+            'sort_order' => 0,
+        ]);
+        $item->statusHistory()->create([
+            'tenant_id' => $this->tenant->id,
+            'from_status' => 'approved',
+            'to_status' => 'in_progress',
+            'reason' => 'شروع درمان',
+            'changed_by' => $this->manager->id,
+        ]);
+
+        $this->actingAs($this->manager)
+            ->withSession(['active_tenant_id' => $this->tenant->id])
+            ->get('/clinic/patients/'.$this->patient->id.'/dental-chart?tooth=16')
+            ->assertOk()
+            ->assertSee('فقط دندان‌های فعال')
+            ->assertSee('آسیای بزرگ اول، فک بالا، سمت راست بیمار')
+            ->assertSee('پوسیدگی سطح جونده')
+            ->assertDontSee('FDI 18');
+
+        self::assertSame('caries', $entry->fresh()->status_code);
+
+        $this->actingAs($this->manager)
+            ->withSession(['active_tenant_id' => $this->tenant->id])
+            ->get('/clinic/patients/'.$this->patient->id.'/dental-chart?tooth=36')
+            ->assertOk()
+            ->assertSee('در حال انجام')
+            ->assertSee('شروع درمان')
+            ->assertSee('ایمپلنت');
+    }
+
+    public function test_treatment_plan_form_prefills_tooth_and_surface_from_chart_context(): void
+    {
+        $this->actingAs($this->manager)
+            ->withSession(['active_tenant_id' => $this->tenant->id])
+            ->get('/clinic/patients/'.$this->patient->id.'/treatment-plans/create?tooth=16&surface=O')
+            ->assertOk()
+            ->assertSee('FDI 16')
+            ->assertSee('value="16" selected', false)
+            ->assertSee('value="O" selected', false);
     }
 
     private function makePatient(Tenant $tenant, string $patientNo, string $mobile): Patient

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DentalChartEntry;
 use App\Support\AuditLogger;
+use App\Support\DentalToothJourneyService;
 use App\Support\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,21 +18,26 @@ final class DentalChartController extends Controller
     public function __construct(
         private readonly TenantContext $tenantContext,
         private readonly AuditLogger $auditLogger,
+        private readonly DentalToothJourneyService $journeyService,
     ) {}
 
-    public function show(int $patientId): View
+    public function show(Request $request, int $patientId): View
     {
         $tenant = $this->tenantContext->require();
         $patient = $tenant->patients()->findOrFail($patientId);
+        $selectedTooth = trim((string) $request->query('tooth', ''));
+        $journeyData = $this->journeyService->build($patient, $selectedTooth !== '' ? $selectedTooth : null);
         $history = $patient->dentalChartEntries()
             ->with('recorder')
             ->latest('id')
             ->get();
-        $currentEntries = $history
-            ->unique(static fn (DentalChartEntry $entry): string => "{$entry->tooth_code}:{$entry->surface_code}")
-            ->keyBy(static fn (DentalChartEntry $entry): string => "{$entry->tooth_code}:{$entry->surface_code}");
 
-        return view('dental-chart.show', compact('tenant', 'patient', 'history', 'currentEntries'));
+        return view('dental-chart.show', [
+            'tenant' => $tenant,
+            'patient' => $patient,
+            'history' => $history,
+            ...$journeyData,
+        ]);
     }
 
     public function store(Request $request, int $patientId): RedirectResponse
