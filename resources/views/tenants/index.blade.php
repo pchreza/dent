@@ -21,6 +21,7 @@
                     <th scope="col">وضعیت</th>
                     <th scope="col">پلن</th>
                     <th scope="col">کاربران</th>
+                    <th scope="col">فرم QR</th>
                     <th scope="col">تاریخ پایان</th>
                 </tr>
             </thead>
@@ -32,10 +33,11 @@
                         <td><span class="status-badge status-badge--info">{{ $tenant->status }}</span></td>
                         <td dir="ltr"><bdi>{{ $tenant->plan_code }}</bdi></td>
                         <td>{{ number_format($tenant->users_count) }}</td>
+                        <td><a class="button button--ghost button--small" href="{{ $tenant->qrRegistrationUrl() }}" target="_blank" rel="noreferrer">بازکردن فرم</a></td>
                         <td dir="ltr"><bdi>{{ $tenant->ends_on?->format('Y-m-d') ?? '—' }}</bdi></td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="empty-state">هنوز کلینیکی ساخته نشده است.</td></tr>
+                    <tr><td colspan="7" class="empty-state">هنوز کلینیکی ساخته نشده است.</td></tr>
                 @endforelse
             </tbody>
         </table>

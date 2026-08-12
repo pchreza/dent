@@ -32,5 +32,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('install', function (Request $request): Limit {
             return Limit::perMinute(3)->by($request->ip());
         });
+
+        RateLimiter::for('qr-registration', function (Request $request): Limit {
+            return Limit::perMinute(5)->by($request->ip());
+        });
     }
 }

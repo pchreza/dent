@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(AuditEvent::class, 'actor_id');
     }
 
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'recipient_id');
+    }
+
     public function isActive(): bool
     {
         return $this->status === 'active';

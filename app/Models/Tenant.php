@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Crypt;
 
 class Tenant extends Model
 {
@@ -67,5 +68,36 @@ class Tenant extends Model
     public function settings(): HasMany
     {
         return $this->hasMany(ClinicSetting::class);
+    }
+
+    public function patients(): HasMany
+    {
+        return $this->hasMany(Patient::class);
+    }
+
+    public function qrRegistrationRequests(): HasMany
+    {
+        return $this->hasMany(QrRegistrationRequest::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function hasQrToken(string $token): bool
+    {
+        return $this->qr_token_hash !== null
+            && hash_equals($this->qr_token_hash, hash('sha256', $token));
+    }
+
+    public function qrRegistrationUrl(): string
+    {
+        if ($this->qr_token_encrypted === null) {
+            return route('public.registration', ['tenantCode' => $this->code]);
+        }
+
+        return route('public.registration', ['tenantCode' => $this->code])
+            .'?token='.urlencode(Crypt::decryptString($this->qr_token_encrypted));
     }
 }

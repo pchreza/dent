@@ -208,3 +208,39 @@ input:focus, select:focus, textarea:focus { border-color: var(--color-primary); 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+.public-registration-card { width: min(100%, 72rem); }
+.alert--info { background: #eff6ff; border-color: #93c5fd; color: #1e3a8a; }
+.success-mark { display: grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: #d1fae5; color: #047857; font-size: 1.7rem; font-weight: 800; }
+.consent-field { align-items: flex-start; padding: .85rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: .7rem; }
+.consent-field input { margin-block-start: .3rem; }
+.search-bar { display: flex; align-items: center; gap: .65rem; margin-block-end: 1.25rem; }
+.search-bar input { flex: 1; }
+.inline-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem; min-width: 18rem; }
+.reject-form { display: flex; align-items: center; gap: .35rem; }
+.reject-form input { width: 8rem; min-height: 2.2rem; padding: .35rem .5rem; }
+.button--small { min-height: 2.2rem; padding: .35rem .65rem; font-size: .8rem; }
+.button--danger { background: #b42318; color: #fff; }
+.button--danger:hover { background: #912018; text-decoration: none; }
+.critical-alert { margin-block-end: 1rem; padding: 1rem; background: #fff1f2; border: 1px solid #fda4af; border-radius: .85rem; color: #9f1239; }
+.patient-overview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-block-end: 1rem; }
+.patient-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.detail-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr) auto; gap: .75rem; padding-block: .7rem; border-block-end: 1px solid #e2e8f0; color: var(--color-muted); font-size: .88rem; }
+.detail-row strong { color: var(--color-primary-strong); }
+.note-block { padding: .75rem; margin-block-end: .65rem; background: #f8fafc; border-radius: .65rem; }
+.note-block strong, .note-block small { display: block; }
+.note-block small { color: var(--color-muted); font-size: .75rem; }
+.note-block p { margin: .45rem 0 0; color: var(--color-text); font-size: .9rem; }
+.tenant-switcher { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-block-end: 1rem; }
+.tenant-switcher__form { min-width: min(100%, 25rem); }
+
+@media (max-width: 768px) {
+    .patient-overview-grid, .patient-detail-grid { grid-template-columns: 1fr; }
+    .tenant-switcher { align-items: stretch; flex-direction: column; }
+    .tenant-switcher__form { min-width: 0; }
+    .search-bar { align-items: stretch; flex-direction: column; }
+    .search-bar .button { width: 100%; }
+    .inline-actions { min-width: 0; }
+    .reject-form { width: 100%; }
+    .reject-form input { flex: 1; width: auto; }
+}

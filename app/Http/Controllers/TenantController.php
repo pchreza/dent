@@ -11,7 +11,9 @@ use App\Models\User;
 use App\Support\AuditLogger;
 use App\Support\NormalizeIdentifier;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 final class TenantController extends Controller
@@ -50,6 +52,11 @@ final class TenantController extends Controller
                     'font' => 'Vazirmatn',
                 ],
             ]);
+
+            $tenant->forceFill([
+                'qr_token_hash' => hash('sha256', $qrToken = Str::random(64)),
+                'qr_token_encrypted' => Crypt::encryptString($qrToken),
+            ])->save();
 
             $manager = User::query()->create([
                 'name' => $data['manager_name'],

@@ -1,6 +1,8 @@
 @php
     $platformName = app(\App\Support\PlatformSettings::class)->get('product_name', config('app.name', 'Disweb Dental SaaS'));
     $brandName = app(\App\Support\PlatformSettings::class)->get('brand_name', 'Disweb');
+    $canViewPatients = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'patients.view');
+    $canReviewQr = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'patients.create');
 @endphp
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -45,7 +47,14 @@
                     @if (session('active_tenant_id'))
                         <a class="nav-link" href="{{ route('branches.index') }}">شعبه‌ها</a>
                     @endif
-                    <span class="nav-link nav-link--disabled">بیماران <small>به‌زودی</small></span>
+                    @if ($canViewPatients && session('active_tenant_id'))
+                        <a class="nav-link" href="{{ route('patients.index') }}">بیماران</a>
+                    @else
+                        <span class="nav-link nav-link--disabled">بیماران <small>محدود</small></span>
+                    @endif
+                    @if ($canReviewQr && session('active_tenant_id'))
+                        <a class="nav-link" href="{{ route('qr-requests.index') }}">درخواست‌های QR</a>
+                    @endif
                     <span class="nav-link nav-link--disabled">تقویم و نوبت <small>به‌زودی</small></span>
                     <span class="nav-link nav-link--disabled">گزارش‌ها <small>به‌زودی</small></span>
                 </nav>
