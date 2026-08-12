@@ -29,7 +29,7 @@
 
 ## نصب روی Windows/Laragon
 
-پیش‌نیازها PHP 8.2 یا 8.3، Composer و SQLite یا MySQL هستند. ZIP را Extract کنید، Laragon/Terminal را باز کنید و از ریشهٔ پروژه، یعنی جایی که `composer.json` و `artisan` قرار دارند، فایل `install-laragon.bat` را اجرا کنید. این فایل در صورت نبودن `vendor`، وابستگی‌های کامل را از روی `composer.lock` نصب می‌کند، مسیرهای runtime شامل cache قالب‌های Blade را می‌سازد و سپس `.env`، APP_KEY، package discovery، migration و cache را به‌ترتیب صحیح آماده می‌سازد.
+پیش‌نیازها PHP 8.2 یا 8.3، Composer و برای دریافت مستقیم از Git، Node.js LTS با Corepack/pnpm هستند. ZIP را Extract کنید یا پروژه را Clone کنید، سپس از ریشهٔ پروژه، یعنی جایی که `composer.json` و `artisan` قرار دارند، فایل `install-laragon.bat` را اجرا کنید. این اسکریپت idempotent است: `.env`، APP_KEY، SQLite، مسیرهای runtime، Composer، Migration، cache و assetهای Vite را خودکار آماده می‌کند. در دریافت Git، `pnpm install --frozen-lockfile` و `pnpm run build` نیز اجرا می‌شوند؛ در Release تمیز، assetهای آمادهٔ `public/build` استفاده می‌شوند. در پایان، اگر نصب کامل نشده باشد `/install` و اگر نصب تکمیل شده باشد `/login` به‌صورت خودکار باز می‌شود. اجرای مجدد اسکریپت پس از Update نیز امن است.
 
 اگر Composer قبلاً روی `vendor` ناقص اجرا شده است، در Git Bash این دستورات را اجرا کنید:
 

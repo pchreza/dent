@@ -4,9 +4,13 @@
 
 خطای `Class Illuminate\Foundation\Application not found` یعنی Composer فایل `vendor/autoload.php` را دارد، اما وابستگی اصلی `laravel/framework` در `vendor` کامل نیست یا autoload قبل از نصب framework اجرا شده است. خطای `Illuminate\Foundation\ComposerScripts is not autoloadable` پیام ثانویهٔ همین وضعیت است؛ `composer dump-autoload` به‌تنهایی وابستگی‌های حذف‌شده را نصب نمی‌کند.
 
-## راه سریع برای پروژهٔ فعلی
+## راه خودکار پیشنهادی
 
-در PowerShell یا Git Bash از ریشهٔ پروژه اجرا کنید؛ مسیر باید همان جایی باشد که `composer.json` و `artisan` قرار دارند:
+فایل `install-laragon.bat` را از کنار `composer.json` اجرا کنید. اسکریپت همهٔ مراحل لازم را انجام می‌دهد: ایجاد `.env`، APP_KEY، SQLite، مسیرهای runtime، Composer، package discovery، Migration، Vite build، پاک‌سازی cache و View cache. سپس با توجه به وجود فایل نصب، مرورگر را به `/install` یا `/login` هدایت می‌کند. برای پروژهٔ دریافت‌شده از Git، Node.js LTS و pnpm/Corepack باید در PATH باشند؛ در Release تمیز، assetهای Vite از قبل موجودند.
+
+## راه دستی برای پروژهٔ فعلی
+
+اگر اسکریپت به‌دلیل نبودن یک پیش‌نیاز متوقف شد، در PowerShell یا Git Bash از ریشهٔ پروژه اجرا کنید؛ مسیر باید همان جایی باشد که `composer.json` و `artisan` قرار دارند:
 
 ```bash
 rm -rf vendor
@@ -25,10 +29,6 @@ rmdir /s /q vendor
 ```
 
 فایل `composer.lock` را حذف نکنید؛ این فایل نسخه‌های تأییدشدهٔ پروژه را تثبیت می‌کند. پس از اجرای دستورها، `/install` را باز کنید و نصب سوپرادمین را از طریق ویزارد ادامه دهید.
-
-## روش خودکار پیشنهادی
-
-فایل `install-laragon.bat` در ریشهٔ پروژه قرار دارد. Laragon و Composer را باز کنید، مطمئن شوید Composer در PATH است و فایل را از کنار `composer.json` اجرا کنید. این اسکریپت وجود framework را بررسی می‌کند، در صورت ناقص‌بودن vendor آن را از روی lock دوباره نصب می‌کند، `.env` و SQLite محلی را می‌سازد، سپس autoload، key، package discovery، cache و migration را اجرا می‌کند.
 
 ## کنترل‌های لازم در Laragon
 

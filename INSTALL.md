@@ -10,6 +10,10 @@
 
 هاست باید PHP 8.2 یا 8.3، MySQL سازگار، افزونه‌های PDO MySQL، Mbstring، OpenSSL، XML، Ctype، JSON، Fileinfo، Tokenizer و Curl، SSL فعال و امکان تنظیم Document Root و Cron داشته باشد.
 
+## نصب خودکار روی Windows/Laragon
+
+برای نصب محلی، فایل `install-laragon.bat` را از ریشهٔ پروژه اجرا کنید. این اسکریپت به‌صورت تکرارپذیر `.env`، APP_KEY، SQLite، مسیرهای runtime، Composer، Migration و cache را آماده می‌کند. اگر پروژه را از Git دریافت کرده‌اید، Node.js LTS و Corepack/pnpm نیز لازم است تا اسکریپت assetهای Vite را با `pnpm install --frozen-lockfile` و `pnpm run build` بسازد. در پایان، اگر فایل `storage/app/private/installed.lock` وجود داشته باشد مرورگر روی `/login` و در غیر این صورت روی `/install` باز می‌شود.
+
 ## نصب وابستگی‌های PHP در مقصد
 
 در مقصد دارای SSH، Terminal داخلی cPanel یا Composer Manager، از ریشهٔ پروژه اجرا کنید:

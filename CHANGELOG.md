@@ -1,5 +1,9 @@
 # تغییرات نسخهٔ آزمایشی
 
+## نسخهٔ 0.1.4 — 2026-08-12
+
+نصب‌کنندهٔ `install-laragon.bat` به جریان خودکار و تکرارپذیر ارتقا یافت. اسکریپت اکنون `.env`، APP_KEY، SQLite، مسیرهای runtime، Composer، Migration، cache و Vite را کنترل و آماده می‌کند. در دریافت Git وابستگی‌های Frontend از روی lockfile نصب و assetهای `public/build/manifest.json` ساخته می‌شوند؛ بنابراین خطای `ViteManifestNotFoundException` رفع می‌شود. در پایان، بر اساس وجود lock نصب، مرورگر به `/install` یا `/login` هدایت می‌شود.
+
 ## نسخهٔ 0.1.3 — 2026-08-12
 
 اسکریپت `install-laragon.bat` اصلاح شد تا مسیرهای runtime موردنیاز Laravel، به‌ویژه `storage/framework/views`، پیش از اجرای Artisan ساخته شوند. همچنین ترتیب نصب به‌گونه‌ای تغییر کرد که Migration پیش از `optimize:clear` اجرا شود؛ به این ترتیب خطای `View path not found` و وابستگی زودهنگام cache به جدول‌های database در نصب محلی برطرف می‌شود.
