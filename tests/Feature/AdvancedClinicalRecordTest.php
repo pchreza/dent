@@ -187,7 +187,7 @@ final class AdvancedClinicalRecordTest extends TestCase
         self::assertSame('molar', $tooth['placement']['family']);
     }
 
-    public function test_chart_defaults_to_active_teeth_and_shows_selected_tooth_journey(): void
+    public function test_minimal_dental_status_page_shows_latest_entries_and_selected_quick_entry(): void
     {
         $entry = DentalChartEntry::query()->create([
             'tenant_id' => $this->tenant->id,
@@ -229,10 +229,12 @@ final class AdvancedClinicalRecordTest extends TestCase
             ->withSession(['active_tenant_id' => $this->tenant->id])
             ->get('/clinic/patients/'.$this->patient->id.'/dental-chart?tooth=16')
             ->assertOk()
-            ->assertSee('فقط دندان‌های فعال')
-            ->assertSee('آسیای بزرگ اول، فک بالا، سمت راست بیمار')
-            ->assertSee('پوسیدگی سطح جونده')
-            ->assertDontSee('FDI 18');
+            ->assertSee('وضعیت دندان‌ها')
+            ->assertSee('دندان‌های دارای وضعیت')
+            ->assertSee('آسیای بزرگ اول، فک بالا')
+            ->assertSee('پوسیدگی')
+            ->assertSee('سطح جونده')
+            ->assertSee('value="16" selected', false);
 
         self::assertSame('caries', $entry->fresh()->status_code);
 
@@ -240,9 +242,9 @@ final class AdvancedClinicalRecordTest extends TestCase
             ->withSession(['active_tenant_id' => $this->tenant->id])
             ->get('/clinic/patients/'.$this->patient->id.'/dental-chart?tooth=36')
             ->assertOk()
-            ->assertSee('در حال انجام')
-            ->assertSee('شروع درمان')
-            ->assertSee('ایمپلنت');
+            ->assertSee('ایمپلنت')
+            ->assertSee('value="36" selected', false)
+            ->assertSee('ثبت وضعیت دندان');
     }
 
     public function test_treatment_plan_form_prefills_tooth_and_surface_from_chart_context(): void

@@ -15,7 +15,7 @@
             <a class="button button--secondary" href="{{ route('clinical-fields.index') }}">تنظیم فیلدهای پرونده</a>
         @endif
         @if ($canViewDentalChart)
-            <a class="button button--secondary" href="{{ route('dental-chart.show', ['patientId' => $patient->id]) }}">نمودار دندان</a>
+            <a class="button button--secondary" href="{{ route('dental-chart.show', ['patientId' => $patient->id]) }}">وضعیت دندان‌ها</a>
         @endif
         <a class="button button--primary" href="{{ route('treatment-plans.create', ['patientId' => $patient->id]) }}">ایجاد طرح درمان</a>
         <a class="button button--ghost" href="{{ route('patients.index') }}">بازگشت به بیماران</a>
