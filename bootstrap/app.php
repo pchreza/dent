@@ -2,7 +2,9 @@
 
 use App\Http\Middleware\EnsureInstalled;
 use App\Http\Middleware\EnsureNotInstalled;
+use App\Http\Middleware\EnsurePatientPortalAccess;
 use App\Http\Middleware\EnsurePermission;
+use App\Http\Middleware\EnsureStaffPortalAccess;
 use App\Http\Middleware\EnsureSystemAdmin;
 use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
@@ -20,6 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'installed' => EnsureInstalled::class,
             'not_installed' => EnsureNotInstalled::class,
             'permission' => EnsurePermission::class,
+            'patient_portal' => EnsurePatientPortalAccess::class,
+            'staff_portal' => EnsureStaffPortalAccess::class,
             'system_admin' => EnsureSystemAdmin::class,
             'tenant' => ResolveTenant::class,
         ]);

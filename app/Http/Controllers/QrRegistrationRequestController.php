@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
+use App\Models\PatientAccount;
 use App\Models\QrRegistrationRequest;
+use App\Models\Role;
+use App\Models\User;
 use App\Support\AuditLogger;
 use App\Support\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 final class QrRegistrationRequestController extends Controller
@@ -37,7 +41,7 @@ final class QrRegistrationRequestController extends Controller
 
         abort_if($registrationRequest->status !== 'pending', 422, 'این درخواست قبلاً بررسی شده است.');
 
-        $patient = DB::transaction(function () use ($registrationRequest, $request, $tenant): Patient {
+        [$patient, $patientAccount] = DB::transaction(function () use ($registrationRequest, $request, $tenant): array {
             $payload = $registrationRequest->payload;
             $patient = $tenant->patients()->create([
                 'patient_no' => $this->nextPatientNumber($tenant->id),
@@ -57,13 +61,15 @@ final class QrRegistrationRequestController extends Controller
                 'created_by' => $request->user()->id,
             ]);
 
+            $patientAccount = $this->activatePatientAccount($patient, $tenant->id, $request->user());
+
             $registrationRequest->forceFill([
                 'status' => 'approved',
                 'reviewed_by' => $request->user()->id,
                 'reviewed_at' => now(),
             ])->save();
 
-            return $patient;
+            return [$patient, $patientAccount];
         });
 
         $this->auditLogger->record(
@@ -71,11 +77,16 @@ final class QrRegistrationRequestController extends Controller
             tenantId: $tenant->id,
             subjectType: Patient::class,
             subjectId: $patient->id,
-            after: ['patient_no' => $patient->patient_no, 'registration_request_id' => $registrationRequest->id],
-            reason: 'تأیید ثبت‌نام QR توسط کاربر کلینیک',
+            after: [
+                'patient_no' => $patient->patient_no,
+                'registration_request_id' => $registrationRequest->id,
+                'patient_account_id' => $patientAccount->id,
+                'user_id' => $patientAccount->user_id,
+            ],
+            reason: 'تأیید ثبت‌نام QR و فعال‌سازی حساب بیمار توسط کاربر کلینیک',
         );
 
-        return back()->with('status', 'درخواست تأیید شد و پروندهٔ بیمار ساخته شد.');
+        return back()->with('status', 'درخواست تأیید شد، پرونده ساخته شد و حساب اولیهٔ بیمار فعال است.');
     }
 
     public function reject(Request $request, int $registrationRequestId): RedirectResponse
@@ -105,6 +116,69 @@ final class QrRegistrationRequestController extends Controller
         );
 
         return back()->with('status', 'درخواست رد شد.');
+    }
+
+    private function activatePatientAccount(Patient $patient, int $tenantId, User $actor): PatientAccount
+    {
+        $patientRole = Role::query()
+            ->whereNull('tenant_id')
+            ->where('code', 'patient')
+            ->firstOrFail();
+
+        $user = User::query()->where('mobile', $patient->mobile)->first();
+
+        if ($user === null) {
+            $user = User::query()->create([
+                'name' => $patient->fullName(),
+                'mobile' => $patient->mobile,
+                'username' => "patient-{$tenantId}-{$patient->id}",
+                'password' => Hash::make($patient->national_id),
+                'status' => 'active',
+                'must_change_password' => true,
+            ]);
+        } else {
+            abort_if(
+                $user->isSystemAdmin() || $this->hasStaffMembership($user, $patientRole->id),
+                422,
+                'این شمارهٔ موبایل به یک حساب کارکنان یا مدیریتی متصل است و برای فعال‌سازی بیمار قابل استفاده نیست.',
+            );
+
+            $linkedAccount = PatientAccount::query()
+                ->where('tenant_id', $tenantId)
+                ->where('user_id', $user->id)
+                ->first();
+
+            abort_if(
+                $linkedAccount !== null && $linkedAccount->patient_id !== $patient->id,
+                422,
+                'این شمارهٔ موبایل در کلینیک فعال به پروندهٔ بیمار دیگری متصل است.',
+            );
+        }
+
+        $user->tenants()->syncWithoutDetaching([
+            $tenantId => [
+                'role_id' => $patientRole->id,
+                'branch_id' => null,
+                'scope' => null,
+                'status' => 'active',
+            ],
+        ]);
+
+        return PatientAccount::query()->firstOrCreate(
+            ['tenant_id' => $tenantId, 'patient_id' => $patient->id],
+            [
+                'user_id' => $user->id,
+                'activated_by' => $actor->id,
+                'activated_at' => now(),
+            ],
+        );
+    }
+
+    private function hasStaffMembership(User $user, int $patientRoleId): bool
+    {
+        return $user->tenants()
+            ->wherePivot('role_id', '!=', $patientRoleId)
+            ->exists();
     }
 
     private function nextPatientNumber(int $tenantId): string

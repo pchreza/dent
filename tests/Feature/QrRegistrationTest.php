@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\Patient;
+use App\Models\PatientAccount;
 use App\Models\QrRegistrationRequest;
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -102,6 +104,27 @@ final class QrRegistrationTest extends TestCase
             'patient_no' => 'P-0000001',
             'national_id' => '0012345679',
         ]);
+
+        $patient = Patient::query()->where('tenant_id', $this->tenant->id)->firstOrFail();
+        $patientAccount = PatientAccount::query()->where('patient_id', $patient->id)->firstOrFail();
+        $patientUser = $patientAccount->user;
+        $patientRole = Role::query()->where('code', 'patient')->firstOrFail();
+
+        self::assertSame($patient->mobile, $patientUser->mobile);
+        self::assertTrue(Hash::check('0012345679', $patientUser->password));
+        self::assertTrue($patientUser->must_change_password);
+        $this->assertDatabaseHas('tenant_user', [
+            'tenant_id' => $this->tenant->id,
+            'user_id' => $patientUser->id,
+            'role_id' => $patientRole->id,
+            'status' => 'active',
+        ]);
+        self::assertDatabaseHas('patient_user', [
+            'tenant_id' => $this->tenant->id,
+            'patient_id' => $patient->id,
+            'user_id' => $patientUser->id,
+        ]);
+        self::assertNotNull($patientAccount->activated_at);
     }
 
     public function test_public_qr_form_records_duplicate_match_without_auto_merging(): void

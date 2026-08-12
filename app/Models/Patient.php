@@ -59,6 +59,11 @@ class Patient extends Model
         return $this->hasMany(QrRegistrationRequest::class);
     }
 
+    public function patientAccounts(): HasMany
+    {
+        return $this->hasMany(PatientAccount::class);
+    }
+
     public function clinicalFieldValues(): HasMany
     {
         return $this->hasMany(PatientClinicalFieldValue::class);

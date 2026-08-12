@@ -16,6 +16,9 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PatientClinicalFieldValueController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PatientPasswordController;
+use App\Http\Controllers\PatientPortalController;
+use App\Http\Controllers\PatientTenantSelectionController;
 use App\Http\Controllers\PlatformSettingsController;
 use App\Http\Controllers\PublicRegistrationController;
 use App\Http\Controllers\QrRegistrationRequestController;
@@ -54,7 +57,24 @@ Route::middleware('installed')->group(function (): void {
         ->middleware(['guest', 'throttle:login'])
         ->name('login.store');
 
-    Route::middleware(['auth', 'tenant'])->group(function (): void {
+    Route::middleware('auth')->prefix('patient')->name('patient.')->group(function (): void {
+        Route::get('/choose-clinic', [PatientTenantSelectionController::class, 'index'])->name('tenants.index');
+        Route::post('/choose-clinic/{tenantId}', [PatientTenantSelectionController::class, 'store'])
+            ->whereNumber('tenantId')
+            ->name('tenants.store');
+    });
+
+    Route::middleware(['auth', 'tenant', 'patient_portal'])->prefix('patient')->name('patient.')->group(function (): void {
+        Route::get('/password/change', [PatientPasswordController::class, 'edit'])->name('password.edit');
+        Route::post('/password/change', [PatientPasswordController::class, 'update'])->name('password.update');
+        Route::get('/dashboard', [PatientPortalController::class, 'dashboard'])->name('dashboard');
+        Route::get('/appointments', [PatientPortalController::class, 'appointments'])->name('appointments');
+        Route::get('/treatment-plans', [PatientPortalController::class, 'treatmentPlans'])->name('treatment-plans');
+        Route::get('/invoices', [PatientPortalController::class, 'invoices'])->name('invoices');
+        Route::get('/notifications', [PatientPortalController::class, 'notifications'])->name('notifications');
+    });
+
+    Route::middleware(['auth', 'tenant', 'staff_portal'])->group(function (): void {
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
         Route::post('/active-tenant/{tenantId}', [ActiveTenantController::class, 'store'])
             ->whereNumber('tenantId')

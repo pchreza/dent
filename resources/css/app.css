@@ -492,3 +492,47 @@ input:disabled, select:disabled, textarea:disabled { cursor: not-allowed; backgr
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Patient portal */
+.stats-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-block-end: 1rem; }
+.stat-card { position: relative; display: grid; gap: .3rem; min-height: 8rem; padding: 1rem; overflow: hidden; background: var(--ui-surface); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); box-shadow: var(--ui-shadow-sm); }
+.stat-card::after { position: absolute; inset-inline-end: 0; inset-block-end: 0; width: 4rem; height: 4rem; background: radial-gradient(circle at 100% 100%, rgba(37, 99, 235, .1), transparent 68%); content: ''; pointer-events: none; }
+.stat-card > span, .stat-card small { color: var(--ui-text-muted); font-size: .75rem; font-weight: 700; }
+.stat-card strong { color: var(--ui-text); font-size: 1.25rem; font-weight: 900; }
+.dashboard-grid--wide { grid-template-columns: minmax(0, 1fr) minmax(17rem, .5fr); }
+.stack-list { display: grid; gap: .65rem; }
+.appointment-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-block-end: 1px solid var(--ui-border); }
+.appointment-row:last-child { border-block-end: 0; }
+.appointment-row p { margin-block-end: 0; color: var(--ui-text-muted); font-size: .78rem; }
+.table-card .table-wrap table { width: 100%; min-width: 42rem; border-collapse: collapse; background: var(--ui-surface); }
+.table-card .table-wrap th, .table-card .table-wrap td { padding: .85rem .8rem; border-block-end: 1px solid var(--ui-border); text-align: start; vertical-align: middle; }
+.table-card .table-wrap th { background: var(--ui-surface-muted); color: var(--ui-text-muted); font-size: .74rem; font-weight: 800; white-space: nowrap; }
+.table-card .table-wrap td { color: var(--ui-text); font-size: .84rem; }
+.table-card .table-wrap tr:last-child td { border-block-end: 0; }
+.table-card small { display: block; margin-block-start: .2rem; color: var(--ui-text-muted); font-size: .74rem; }
+.notification-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.notification-card--unread { background: var(--ui-brand-50); border-color: var(--ui-brand-100); }
+.notification-card h2 { margin: .55rem 0 .15rem; font-size: .92rem; }
+.notification-card p { margin-block-end: 0; color: var(--ui-text-muted); font-size: .82rem; }
+.notification-card time { flex: 0 0 auto; color: var(--ui-text-faint); font-size: .72rem; }
+.form-group { display: grid; gap: .42rem; min-width: 0; }
+.form-group--full { grid-column: 1 / -1; }
+.form-group label { color: var(--ui-text); font-size: .82rem; font-weight: 800; }
+.form-group label span { color: var(--ui-danger); }
+.form-hint { margin-block-end: 0; color: var(--ui-text-muted); font-size: .74rem; }
+.patient-tenant-selection { display: grid; justify-items: center; gap: .85rem; width: min(100% - 2.5rem, 34rem); margin: clamp(2rem, 8vh, 6rem) auto; padding: clamp(1.25rem, 3vw, 2rem); background: var(--ui-surface); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-lg); box-shadow: var(--ui-shadow-md); text-align: center; }
+.patient-tenant-selection > p { color: var(--ui-text-muted); }
+.patient-tenant-selection .stack-list { width: 100%; margin-block-start: .65rem; text-align: start; }
+.selection-card { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; background: var(--ui-surface-muted); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); color: var(--ui-text); text-align: start; transition: background-color .18s ease, border-color .18s ease, color .18s ease; }
+.selection-card:hover { background: var(--ui-brand-50); border-color: var(--ui-brand-100); color: var(--ui-brand-700); }
+.selection-card > span { display: grid; gap: .2rem; }
+.selection-card small { color: var(--ui-text-muted); }
+
+@media (max-width: 760px) {
+    .stats-grid, .dashboard-grid--wide { grid-template-columns: 1fr; }
+    .notification-card { display: grid; }
+    .notification-card time { order: -1; }
+}
+
+.badge { display: inline-flex; align-items: center; min-height: 1.7rem; padding: .25rem .58rem; background: var(--ui-surface-strong); border-radius: 999px; color: var(--ui-text-muted); font-size: .72rem; font-weight: 800; line-height: 1.2; white-space: nowrap; }
+.badge--info { background: var(--ui-brand-50); color: var(--ui-brand-700); }

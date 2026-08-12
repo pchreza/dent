@@ -55,7 +55,16 @@ final class AuthController extends Controller
 
         RateLimiter::clear($key);
         $request->session()->regenerate();
-        $request->user()->forceFill(['last_login_at' => now()])->save();
+        $user = $request->user();
+        $user->forceFill(['last_login_at' => now()])->save();
+
+        if ($user->patientAccounts()->exists()) {
+            if ($user->patientAccounts()->count() > 1) {
+                return redirect()->route('patient.tenants.index');
+            }
+
+            return redirect()->route($user->must_change_password ? 'patient.password.edit' : 'patient.dashboard');
+        }
 
         return redirect()->intended(route('dashboard'));
     }

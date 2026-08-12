@@ -57,6 +57,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function patientAccounts(): HasMany
+    {
+        return $this->hasMany(PatientAccount::class);
+    }
+
     public function auditEvents(): HasMany
     {
         return $this->hasMany(AuditEvent::class, 'actor_id');
