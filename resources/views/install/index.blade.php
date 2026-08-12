@@ -28,15 +28,15 @@
                 <h2>برند و تنظیمات سامانه</h2>
                 <div class="field-grid">
                     <div class="field">
-                        <label for="product_name">نام محصول <span aria-hidden="true">*</span></label>
+                        <label for="product_name">نام محصول <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="product_name" name="product_name" value="{{ old('product_name', 'Disweb Dental SaaS') }}" required>
                     </div>
                     <div class="field">
-                        <label for="brand_name">نام برند <span aria-hidden="true">*</span></label>
+                        <label for="brand_name">نام برند <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="brand_name" name="brand_name" value="{{ old('brand_name', 'Disweb') }}" required>
                     </div>
                     <div class="field">
-                        <label for="timezone">منطقهٔ زمانی <span aria-hidden="true">*</span></label>
+                        <label for="timezone">منطقهٔ زمانی <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <select id="timezone" name="timezone" required>
                             <option value="Asia/Tehran" @selected(old('timezone', 'Asia/Tehran') === 'Asia/Tehran')>ایران — تهران</option>
                             <option value="UTC" @selected(old('timezone') === 'UTC')>UTC</option>
@@ -49,24 +49,24 @@
                 <h2>ساخت سوپرادمین</h2>
                 <div class="field-grid">
                     <div class="field">
-                        <label for="admin_name">نام و نام خانوادگی <span aria-hidden="true">*</span></label>
+                        <label for="admin_name">نام و نام خانوادگی <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="admin_name" name="admin_name" value="{{ old('admin_name') }}" required autocomplete="name">
                     </div>
                     <div class="field">
-                        <label for="mobile">شمارهٔ موبایل <span aria-hidden="true">*</span></label>
+                        <label for="mobile">شمارهٔ موبایل <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="mobile" name="mobile" value="{{ old('mobile') }}" required inputmode="tel" dir="ltr" autocomplete="tel">
                     </div>
                     <div class="field">
-                        <label for="username">نام کاربری <span aria-hidden="true">*</span></label>
+                        <label for="username">نام کاربری <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="username" name="username" value="{{ old('username', 'superadmin') }}" required dir="ltr" autocomplete="username">
                     </div>
                     <div class="field">
-                        <label for="password">رمز عبور <span aria-hidden="true">*</span></label>
+                        <label for="password">رمز عبور <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="password" type="password" name="password" required minlength="10" autocomplete="new-password">
                         <small>حداقل ۱۰ کاراکتر.</small>
                     </div>
                     <div class="field">
-                        <label for="password_confirmation">تکرار رمز عبور <span aria-hidden="true">*</span></label>
+                        <label for="password_confirmation">تکرار رمز عبور <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                         <input id="password_confirmation" type="password" name="password_confirmation" required minlength="10" autocomplete="new-password">
                     </div>
                 </div>

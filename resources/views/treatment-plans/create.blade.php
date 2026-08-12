@@ -9,7 +9,7 @@
         <p class="muted">هر آیتم به‌صورت مستقل به مرحله، دندان، سطح و هزینهٔ برآوردی متصل می‌شود.</p>
     </div>
     <div class="inline-actions">
-        <a class="button button--secondary" href="{{ route('dental-chart.show', ['patientId' => $patient->id]) }}">نمودار دندان</a>
+        <a class="button button--secondary" href="{{ route('dental-chart.show', ['patientId' => $patient->id]) }}">وضعیت دندان‌ها</a>
         <a class="button button--ghost" href="{{ route('patients.show', ['patientId' => $patient->id]) }}">بازگشت به پرونده</a>
     </div>
 </div>
@@ -29,7 +29,7 @@
     </section>
 
     @if ($prefillTooth)
-        <div class="status-message status-message--info">آیتم نخست از نمودار دندان آماده شده است: <bdi dir="ltr">FDI {{ $prefillTooth }}</bdi> · {{ \App\Support\DentalToothPresenter::surfaceLabel($prefillSurface) }}</div>
+        <div class="status-message status-message--info">آیتم نخست از وضعیت دندان‌ها آماده شده است: <bdi dir="ltr">FDI {{ $prefillTooth }}</bdi> · {{ \App\Support\DentalToothPresenter::surfaceLabel($prefillSurface) }}</div>
     @endif
 
     <section class="card" aria-labelledby="treatment-items-title">

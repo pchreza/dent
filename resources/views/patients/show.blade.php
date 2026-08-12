@@ -8,7 +8,7 @@
     <div>
         <span class="eyebrow">{{ $tenant->name }} · پروندهٔ {{ $patient->patient_no }}</span>
         <h1>{{ $patient->fullName() }}</h1>
-        <p class="muted">آخرین به‌روزرسانی: <span dir="ltr"><bdi>{{ $patient->updated_at?->format('Y-m-d H:i') }}</bdi></span></p>
+        <p class="muted">آخرین به‌روزرسانی: <span dir="ltr"><bdi>{{ $patient->updated_at ? \App\Support\JalaliDate::format($patient->updated_at).' · '.$patient->updated_at->format('H:i') : '—' }}</bdi></span></p>
     </div>
     <div class="inline-actions">
         @if ($canEditClinical)
@@ -28,8 +28,8 @@
 
 <section class="patient-overview-grid">
     <article class="card"><span class="metric-card__label">موبایل</span><strong dir="ltr"><bdi>{{ $patient->mobile }}</bdi></strong><small>{{ $patient->insurance_name ?: 'بیمه ثبت نشده' }}</small></article>
-    <article class="card"><span class="metric-card__label">کد ملی</span><strong dir="ltr"><bdi>{{ $patient->national_id }}</bdi></strong><small>{{ $patient->birth_date?->format('Y-m-d') ?: 'تاریخ تولد ثبت نشده' }}</small></article>
-    <article class="card"><span class="metric-card__label">وضعیت پرونده</span><strong>{{ $patient->status }}</strong><small>{{ $patient->verified_at ? 'تأییدشده' : 'در انتظار تأیید' }}</small></article>
+    <article class="card"><span class="metric-card__label">کد ملی</span><strong dir="ltr"><bdi>{{ $patient->national_id }}</bdi></strong><small>{{ $patient->birth_date ? \App\Support\JalaliDate::format($patient->birth_date) : 'تاریخ تولد ثبت نشده' }}</small></article>
+    <article class="card"><span class="metric-card__label">وضعیت پرونده</span><strong>{{ ['active' => 'فعال', 'pending' => 'در انتظار بررسی', 'inactive' => 'غیرفعال', 'archived' => 'بایگانی‌شده'][$patient->status] ?? $patient->status }}</strong><small>{{ $patient->verified_at ? 'تأییدشده' : 'در انتظار تأیید' }}</small></article>
 </section>
 
 @if ($clinicalFieldDefinitions->isNotEmpty())
@@ -153,7 +153,7 @@
     <article class="card">
         <div class="section-heading section-heading--compact"><h2>یادداشت‌ها</h2><span class="status-badge status-badge--info">{{ $patient->notes->count() }}</span></div>
         @forelse ($patient->notes as $note)
-            <div class="note-block"><strong>{{ $note->author?->name ?: 'کاربر سامانه' }}</strong><small>{{ $note->created_at?->format('Y-m-d H:i') }}</small><p>{{ $note->body }}</p></div>
+            <div class="note-block"><strong>{{ $note->author?->name ?: 'کاربر سامانه' }}</strong><small>{{ $note->created_at ? \App\Support\JalaliDate::format($note->created_at).' · '.$note->created_at->format('H:i') : '—' }}</small><p>{{ $note->body }}</p></div>
         @empty
             <p class="muted">یادداشتی ثبت نشده است.</p>
         @endforelse

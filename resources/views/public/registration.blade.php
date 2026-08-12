@@ -22,12 +22,12 @@
             <div class="form-section">
                 <h2>مشخصات فردی</h2>
                 <div class="field-grid">
-                    <div class="field"><label for="first_name">نام *</label><input id="first_name" name="first_name" value="{{ old('first_name') }}" required></div>
-                    <div class="field"><label for="last_name">نام خانوادگی *</label><input id="last_name" name="last_name" value="{{ old('last_name') }}" required></div>
-                    <div class="field"><label for="national_id">کد ملی *</label><input id="national_id" name="national_id" value="{{ old('national_id') }}" required inputmode="numeric" dir="ltr"></div>
+                    <div class="field"><label for="first_name">نام <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="first_name" name="first_name" value="{{ old('first_name') }}" required></div>
+                    <div class="field"><label for="last_name">نام خانوادگی <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="last_name" name="last_name" value="{{ old('last_name') }}" required></div>
+                    <div class="field"><label for="national_id">کد ملی <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="national_id" name="national_id" value="{{ old('national_id') }}" required inputmode="numeric" dir="ltr"></div>
                     <div class="field"><label for="birth_date">تاریخ تولد</label><input id="birth_date" type="date" name="birth_date" value="{{ old('birth_date') }}" dir="ltr"></div>
                     <div class="field"><label for="gender">جنسیت</label><select id="gender" name="gender"><option value="">انتخاب کنید</option><option value="male" @selected(old('gender') === 'male')>مرد</option><option value="female" @selected(old('gender') === 'female')>زن</option><option value="other" @selected(old('gender') === 'other')>سایر</option><option value="unknown" @selected(old('gender') === 'unknown')>ترجیح می‌دهم نگویم</option></select></div>
-                    <div class="field"><label for="mobile">موبایل *</label><input id="mobile" name="mobile" value="{{ old('mobile') }}" required inputmode="tel" dir="ltr"></div>
+                    <div class="field"><label for="mobile">موبایل <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="mobile" name="mobile" value="{{ old('mobile') }}" required inputmode="tel" dir="ltr"></div>
                     <div class="field"><label for="phone">تلفن ثابت</label><input id="phone" name="phone" value="{{ old('phone') }}" inputmode="tel" dir="ltr"></div>
                     <div class="field field--full"><label for="address">نشانی</label><textarea id="address" name="address" rows="3">{{ old('address') }}</textarea></div>
                     <div class="field"><label for="insurance_name">بیمه</label><input id="insurance_name" name="insurance_name" value="{{ old('insurance_name') }}"></div>

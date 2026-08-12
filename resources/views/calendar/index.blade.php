@@ -1,6 +1,7 @@
 @extends('layouts.app', ['title' => 'تقویم نوبت‌ها'])
 
 @section('content')
+@php($appointmentStatusLabels = ['scheduled' => 'برنامه‌ریزی‌شده', 'confirmed' => 'تأییدشده', 'completed' => 'تکمیل‌شده', 'cancelled' => 'لغوشده'])
 <div class="page-header">
     <div>
         <span class="eyebrow">{{ $tenant->name }}</span>
@@ -31,6 +32,7 @@
                         <strong>{{ $appointment->patient->fullName() }}</strong>
                         <small>{{ $appointment->title }}</small>
                         <small>{{ $appointment->practitioner?->user?->name ?: 'پزشک تعیین نشده' }}</small>
+                        <span class="status-badge status-badge--info">{{ $appointmentStatusLabels[$appointment->status] ?? $appointment->status }}</span>
                     </div>
                 @empty
                     <p class="calendar-day__empty">بدون نوبت</p>

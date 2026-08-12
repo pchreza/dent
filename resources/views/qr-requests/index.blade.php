@@ -18,7 +18,7 @@
             @forelse ($requests as $registrationRequest)
                 @php($payload = $registrationRequest->payload)
                 <tr>
-                    <td dir="ltr"><bdi>{{ $registrationRequest->created_at?->format('Y-m-d H:i') }}</bdi></td>
+                    <td dir="ltr"><bdi>{{ $registrationRequest->created_at ? \App\Support\JalaliDate::format($registrationRequest->created_at).' · '.$registrationRequest->created_at->format('H:i') : '—' }}</bdi></td>
                     <td><strong>{{ $payload['first_name'] ?? '—' }} {{ $payload['last_name'] ?? '' }}</strong></td>
                     <td dir="ltr"><bdi>{{ $payload['mobile'] ?? '—' }}</bdi></td>
                     <td>
@@ -28,7 +28,7 @@
                             <span class="status-badge status-badge--success">بدون تطبیق</span>
                         @endif
                     </td>
-                    <td><span class="status-badge status-badge--info">{{ $registrationRequest->status }}</span></td>
+                    <td><span class="status-badge status-badge--info">{{ ['pending' => 'در انتظار بررسی', 'approved' => 'تأییدشده', 'rejected' => 'ردشده'][$registrationRequest->status] ?? $registrationRequest->status }}</span></td>
                     <td>
                         @if ($registrationRequest->status === 'pending')
                             <div class="inline-actions">

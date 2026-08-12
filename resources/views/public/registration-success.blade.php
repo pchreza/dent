@@ -4,7 +4,7 @@
 <div class="auth-page">
     <section class="auth-card card">
         <div class="auth-card__intro">
-            <span class="success-mark" aria-hidden="true">✓</span>
+            <span class="success-mark" aria-hidden="true"><x-ui.icon name="check" size="28" /></span>
             <span class="eyebrow">درخواست دریافت شد</span>
             <h1>درخواست شما ثبت شد</h1>
             <p class="muted">اطلاعات شما برای بررسی به کلینیک ارسال شد. پس از تأیید، کارکنان کلینیک با شما تماس خواهند گرفت.</p>

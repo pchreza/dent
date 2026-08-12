@@ -7,6 +7,7 @@
         <h1>بیماران</h1>
         <p class="muted">جست‌وجوی پرونده‌ها فقط در محدودهٔ کلینیک فعال انجام می‌شود.</p>
     </div>
+    <span class="status-badge status-badge--info"><span dir="ltr"><bdi>{{ number_format($patients->total()) }}</bdi></span> پرونده</span>
 </div>
 
 <section class="card">
@@ -14,6 +15,9 @@
         <label class="sr-only" for="patient-search">جست‌وجوی بیمار</label>
         <input id="patient-search" name="q" value="{{ $search }}" placeholder="نام، نام خانوادگی، شماره پرونده یا موبایل" autocomplete="off">
         <button class="button button--primary" type="submit">جست‌وجو</button>
+        @if ($search !== '')
+            <a class="button button--ghost" href="{{ route('patients.index') }}">پاک‌کردن</a>
+        @endif
     </form>
 
     <div class="table-wrap">
@@ -27,7 +31,7 @@
                     <td><strong>{{ $patient->fullName() }}</strong></td>
                     <td dir="ltr"><bdi>{{ $patient->mobile }}</bdi></td>
                     <td dir="ltr"><bdi>{{ $patient->national_id }}</bdi></td>
-                    <td><span class="status-badge status-badge--success">{{ $patient->status }}</span></td>
+                    <td><span class="status-badge status-badge--success">{{ ['active' => 'فعال', 'pending' => 'در انتظار بررسی', 'inactive' => 'غیرفعال', 'archived' => 'بایگانی‌شده'][$patient->status] ?? $patient->status }}</span></td>
                     <td><a class="button button--ghost button--small" href="{{ route('patients.show', ['patientId' => $patient->id]) }}">مشاهده پرونده</a></td>
                 </tr>
             @empty

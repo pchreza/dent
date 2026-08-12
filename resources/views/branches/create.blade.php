@@ -15,11 +15,11 @@
         @csrf
         <div class="field-grid">
             <div class="field">
-                <label for="name">نام شعبه *</label>
+                <label for="name">نام شعبه <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                 <input id="name" name="name" value="{{ old('name') }}" required>
             </div>
             <div class="field">
-                <label for="code">کد شعبه *</label>
+                <label for="code">کد شعبه <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                 <input id="code" name="code" value="{{ old('code') }}" required dir="ltr" placeholder="BRANCH-01">
             </div>
             <div class="field">

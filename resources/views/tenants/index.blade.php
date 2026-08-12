@@ -30,11 +30,11 @@
                     <tr>
                         <td><strong>{{ $tenant->name }}</strong></td>
                         <td dir="ltr"><bdi>{{ $tenant->code }}</bdi></td>
-                        <td><span class="status-badge status-badge--info">{{ $tenant->status }}</span></td>
+                        <td><span class="status-badge status-badge--info">{{ ['active' => 'فعال', 'trial' => 'آزمایشی', 'suspended' => 'معلق', 'inactive' => 'غیرفعال'][$tenant->status] ?? $tenant->status }}</span></td>
                         <td dir="ltr"><bdi>{{ $tenant->plan_code }}</bdi></td>
                         <td>{{ number_format($tenant->users_count) }}</td>
                         <td><a class="button button--ghost button--small" href="{{ $tenant->qrRegistrationUrl() }}" target="_blank" rel="noreferrer">بازکردن فرم</a></td>
-                        <td dir="ltr"><bdi>{{ $tenant->ends_on?->format('Y-m-d') ?? '—' }}</bdi></td>
+                        <td dir="ltr"><bdi>{{ $tenant->ends_on ? \App\Support\JalaliDate::format($tenant->ends_on) : '—' }}</bdi></td>
                     </tr>
                 @empty
                     <tr><td colspan="7" class="empty-state">هنوز کلینیکی ساخته نشده است.</td></tr>

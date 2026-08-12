@@ -17,15 +17,15 @@
             <h2>اطلاعات کلینیک</h2>
             <div class="field-grid">
                 <div class="field">
-                    <label for="name">نام کلینیک *</label>
+                    <label for="name">نام کلینیک <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="name" name="name" value="{{ old('name') }}" required>
                 </div>
                 <div class="field">
-                    <label for="code">کد یکتا *</label>
+                    <label for="code">کد یکتا <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="code" name="code" value="{{ old('code') }}" required dir="ltr" placeholder="CLINIC-001">
                 </div>
                 <div class="field">
-                    <label for="plan_code">کد پلن *</label>
+                    <label for="plan_code">کد پلن <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="plan_code" name="plan_code" value="{{ old('plan_code', 'free') }}" required dir="ltr">
                 </div>
                 <div class="field">
@@ -43,23 +43,23 @@
             <h2>مدیر اولیهٔ کلینیک</h2>
             <div class="field-grid">
                 <div class="field">
-                    <label for="manager_name">نام و نام خانوادگی *</label>
+                    <label for="manager_name">نام و نام خانوادگی <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="manager_name" name="manager_name" value="{{ old('manager_name') }}" required>
                 </div>
                 <div class="field">
-                    <label for="manager_mobile">شماره موبایل *</label>
+                    <label for="manager_mobile">شماره موبایل <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="manager_mobile" name="manager_mobile" value="{{ old('manager_mobile') }}" required dir="ltr" inputmode="tel">
                 </div>
                 <div class="field">
-                    <label for="manager_username">نام کاربری *</label>
+                    <label for="manager_username">نام کاربری <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="manager_username" name="manager_username" value="{{ old('manager_username') }}" required dir="ltr">
                 </div>
                 <div class="field">
-                    <label for="manager_password">رمز اولیه *</label>
+                    <label for="manager_password">رمز اولیه <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="manager_password" type="password" name="manager_password" required minlength="10" dir="ltr" autocomplete="new-password">
                 </div>
                 <div class="field">
-                    <label for="manager_password_confirmation">تکرار رمز اولیه *</label>
+                    <label for="manager_password_confirmation">تکرار رمز اولیه <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
                     <input id="manager_password_confirmation" type="password" name="manager_password_confirmation" required minlength="10" dir="ltr" autocomplete="new-password">
                 </div>
             </div>

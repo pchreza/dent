@@ -24,8 +24,8 @@
         <h2>افزودن مرحلهٔ اختصاصی</h2>
         <form method="post" action="{{ route('treatment-stages.store') }}" class="stack-form">
             @csrf
-            <div class="field"><label for="code">کد مرحله *</label><input id="code" name="code" value="{{ old('code') }}" required dir="ltr" placeholder="custom_stage"></div>
-            <div class="field"><label for="name">نام مرحله *</label><input id="name" name="name" value="{{ old('name') }}" required placeholder="مثلاً قالب‌گیری"></div>
+            <div class="field"><label for="code">کد مرحله <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="code" name="code" value="{{ old('code') }}" required dir="ltr" placeholder="custom_stage"></div>
+            <div class="field"><label for="name">نام مرحله <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label><input id="name" name="name" value="{{ old('name') }}" required placeholder="مثلاً قالب‌گیری"></div>
             <div class="field"><label for="category">دسته‌بندی</label><input id="category" name="category" value="{{ old('category') }}"></div>
             <div class="field"><label for="color">رنگ</label><input id="color" name="color" value="{{ old('color', '#0891B2') }}" dir="ltr" placeholder="#0891B2"></div>
             <button class="button button--primary" type="submit">افزودن مرحله</button>
