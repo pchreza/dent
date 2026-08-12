@@ -37,9 +37,29 @@ final class PatientController extends Controller
     {
         $tenant = $this->tenantContext->require();
         $patient = $tenant->patients()
-            ->with(['conditions.condition', 'allergies', 'medications', 'notes.author'])
+            ->with([
+                'conditions.condition',
+                'allergies',
+                'medications',
+                'notes.author',
+                'clinicalFieldValues.definition',
+                'treatmentPlans.items.stage',
+                'treatmentPlans.items.statusHistory',
+            ])
             ->findOrFail($patientId);
+        $clinicalFieldDefinitions = $tenant->clinicalFieldDefinitions()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('label')
+            ->get();
+        $clinicalFieldValues = $patient->clinicalFieldValues
+            ->keyBy('clinical_field_definition_id');
 
-        return view('patients.show', compact('tenant', 'patient'));
+        return view('patients.show', compact(
+            'tenant',
+            'patient',
+            'clinicalFieldDefinitions',
+            'clinicalFieldValues',
+        ));
     }
 }

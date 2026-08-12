@@ -90,6 +90,16 @@ class Tenant extends Model
         return $this->hasMany(TreatmentStageDefinition::class);
     }
 
+    public function clinicalFieldDefinitions(): HasMany
+    {
+        return $this->hasMany(ClinicalFieldDefinition::class);
+    }
+
+    public function dentalChartEntries(): HasMany
+    {
+        return $this->hasMany(DentalChartEntry::class);
+    }
+
     public function treatmentPlans(): HasMany
     {
         return $this->hasMany(TreatmentPlan::class);

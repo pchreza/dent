@@ -7,17 +7,21 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ClinicalFieldDefinitionController;
 use App\Http\Controllers\ClinicUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DentalChartController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PatientClinicalFieldValueController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PlatformSettingsController;
 use App\Http\Controllers\PublicRegistrationController;
 use App\Http\Controllers\QrRegistrationRequestController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TreatmentPlanController;
+use App\Http\Controllers\TreatmentPlanItemController;
 use App\Http\Controllers\TreatmentStageController;
 use App\Support\InstallationState;
 use Illuminate\Support\Facades\Route;
@@ -76,6 +80,28 @@ Route::middleware('installed')->group(function (): void {
         Route::prefix('clinic')->name('patients.')->middleware('permission:patients.view')->group(function (): void {
             Route::get('/patients', [PatientController::class, 'index'])->name('index');
             Route::get('/patients/{patientId}', [PatientController::class, 'show'])->whereNumber('patientId')->name('show');
+            Route::post('/patients/{patientId}/clinical-fields', [PatientClinicalFieldValueController::class, 'store'])
+                ->whereNumber('patientId')
+                ->middleware('permission:clinical.update')
+                ->name('clinical-fields.store');
+        });
+
+        Route::prefix('clinic')->name('dental-chart.')->middleware('permission:dentistry.view')->group(function (): void {
+            Route::get('/patients/{patientId}/dental-chart', [DentalChartController::class, 'show'])
+                ->whereNumber('patientId')
+                ->name('show');
+            Route::post('/patients/{patientId}/dental-chart', [DentalChartController::class, 'store'])
+                ->whereNumber('patientId')
+                ->middleware('permission:dentistry.update')
+                ->name('store');
+        });
+
+        Route::prefix('clinic')->name('clinical-fields.')->middleware('permission:clinical.update')->group(function (): void {
+            Route::get('/clinical-fields', [ClinicalFieldDefinitionController::class, 'index'])->name('index');
+            Route::post('/clinical-fields', [ClinicalFieldDefinitionController::class, 'store'])->name('store');
+            Route::patch('/clinical-fields/{definitionId}', [ClinicalFieldDefinitionController::class, 'update'])
+                ->whereNumber('definitionId')
+                ->name('update');
         });
 
         Route::prefix('clinic')->name('calendar.')->middleware('permission:scheduling.view')->group(function (): void {
@@ -111,6 +137,12 @@ Route::middleware('installed')->group(function (): void {
         Route::prefix('clinic')->name('treatment-plans.')->middleware('permission:treatments.create')->group(function (): void {
             Route::get('/patients/{patientId}/treatment-plans/create', [TreatmentPlanController::class, 'create'])->whereNumber('patientId')->name('create');
             Route::post('/treatment-plans', [TreatmentPlanController::class, 'store'])->name('store');
+        });
+
+        Route::prefix('clinic')->name('treatment-plan-items.')->middleware('permission:treatments.update')->group(function (): void {
+            Route::patch('/treatment-plan-items/{itemId}/status', [TreatmentPlanItemController::class, 'updateStatus'])
+                ->whereNumber('itemId')
+                ->name('status.update');
         });
 
         Route::prefix('clinic')->name('qr-requests.')->middleware('permission:patients.create')->group(function (): void {

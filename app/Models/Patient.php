@@ -59,6 +59,21 @@ class Patient extends Model
         return $this->hasMany(QrRegistrationRequest::class);
     }
 
+    public function clinicalFieldValues(): HasMany
+    {
+        return $this->hasMany(PatientClinicalFieldValue::class);
+    }
+
+    public function dentalChartEntries(): HasMany
+    {
+        return $this->hasMany(DentalChartEntry::class);
+    }
+
+    public function treatmentPlans(): HasMany
+    {
+        return $this->hasMany(TreatmentPlan::class);
+    }
+
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');

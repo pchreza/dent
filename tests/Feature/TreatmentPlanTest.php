@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\TreatmentPlan;
+use App\Models\TreatmentStageDefinition;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
@@ -69,6 +70,8 @@ final class TreatmentPlanTest extends TestCase
 
     public function test_manager_can_create_treatment_plan_for_patient(): void
     {
+        $stage = TreatmentStageDefinition::query()->where('code', 'filling')->firstOrFail();
+
         $response = $this->actingAs($this->manager)
             ->withSession(['active_tenant_id' => $this->tenant->id])
             ->post('/clinic/treatment-plans', [
@@ -77,6 +80,16 @@ final class TreatmentPlanTest extends TestCase
                 'status' => 'active',
                 'started_on' => '2025-08-12',
                 'notes' => 'پرکردن و پیگیری عصب‌کشی.',
+                'items' => [[
+                    'stage_id' => $stage->id,
+                    'tooth_code' => '16',
+                    'surface_code' => 'O',
+                    'status' => 'planned',
+                    'priority' => 'high',
+                    'estimated_cost' => 2500000,
+                    'planned_on' => '2025-08-12',
+                    'notes' => 'ترمیم سطح اکلوزال.',
+                ]],
             ]);
 
         $response->assertRedirect('/clinic/patients/'.$this->patient->id);
@@ -87,5 +100,15 @@ final class TreatmentPlanTest extends TestCase
             'status' => 'active',
         ]);
         self::assertSame(1, TreatmentPlan::query()->where('tenant_id', $this->tenant->id)->count());
+        $this->assertDatabaseHas('treatment_plan_items', [
+            'tenant_id' => $this->tenant->id,
+            'tooth_code' => '16',
+            'surface_code' => 'O',
+            'status' => 'planned',
+        ]);
+        $this->assertDatabaseHas('treatment_plan_item_status_history', [
+            'tenant_id' => $this->tenant->id,
+            'to_status' => 'planned',
+        ]);
     }
 }

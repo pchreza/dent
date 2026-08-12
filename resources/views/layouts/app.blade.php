@@ -70,6 +70,9 @@
                     @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'scheduling.create'))
                         <a class="nav-link" href="{{ route('appointments.create') }}">ثبت نوبت</a>
                     @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'clinical.update'))
+                        <a class="nav-link" href="{{ route('clinical-fields.index') }}">فیلدهای پرونده</a>
+                    @endif
                     @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'treatments.update'))
                         <a class="nav-link" href="{{ route('treatment-stages.index') }}">مراحل درمان</a>
                     @endif

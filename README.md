@@ -8,6 +8,8 @@
 
 این نسخه شامل ویزارد نصب، احراز هویت موبایل/نام کاربری، سوپرادمین، جداسازی Tenant، مدیریت کلینیک و شعبه، مدیریت پزشک و منشی، نقش و مجوز، ثبت بیمار با QR و صف تأیید، پروندهٔ پایه، حساسیت و دارو، اعلان داخلی، تقویم هفتگی شمسی، نوبت‌دهی و کنترل هم‌پوشانی، مراحل و طرح درمان، فاکتور و پرداخت، Audit و تنظیم فونت پنل است.
 
+فاز پروندهٔ دندان‌پزشکی پیشرفته اکنون شامل فیلدهای سفارشی پرونده، نمودار دندان FDI برای دندان‌های دائمی و شیری، تاریخچهٔ افزایشی وضعیت دندان و طرح درمان چندآیتمی متصل به دندان/سطح، مرحله، اولویت و هزینه است. گزارش QA این فاز در [`docs/qa/phase-6-report-fa.md`](docs/qa/phase-6-report-fa.md) و طراحی فنی در [`docs/product/phase-6-advanced-clinical-record-fa.md`](docs/product/phase-6-advanced-clinical-record-fa.md) قرار دارد.
+
 قابلیت‌های نمودار گرافیکی دندان، فایل پزشکی، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، پورتال کامل بیمار، گزارش‌ساز پیشرفته، Queue تولیدی و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند.
 
 ## فناوری و الزامات
@@ -58,6 +60,7 @@ composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 php artisan key:generate --force
 php artisan migrate --force
 php artisan optimize:clear
+php artisan view:cache
 ```
 
 بعد آدرس `/install` را باز کنید و سوپرادمین اولیه را بسازید. مسیر نصب پس از تکمیل قفل می‌شود.
@@ -102,6 +105,7 @@ composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 php artisan migrate --force
 php artisan optimize:clear
+php artisan view:cache
 ```
 
 بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
