@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Support\AuthorizationService;
 use App\Support\InstallationState;
 use App\Support\PlatformSettings;
 use App\Support\TenantContext;
@@ -16,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->singleton(AuthorizationService::class);
         $this->app->singleton(InstallationState::class);
         $this->app->singleton(PlatformSettings::class);
         $this->app->singleton(TenantContext::class);

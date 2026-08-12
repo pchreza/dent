@@ -131,6 +131,17 @@ h2 { margin-block-end: .45rem; color: var(--color-primary-strong); font-size: 1.
 .form-grid { display: grid; gap: 1.5rem; }
 .form-section { padding-block-start: 1.25rem; border-block-start: 1px solid #e2e8f0; }
 .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.field--full { grid-column: 1 / -1; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; min-width: 44rem; border-collapse: collapse; }
+.data-table th, .data-table td { padding: .85rem .75rem; border-block-end: 1px solid #e2e8f0; text-align: start; vertical-align: middle; }
+.data-table th { color: var(--color-primary-strong); font-size: .82rem; background: #f8fafc; }
+.data-table td { color: var(--color-text); font-size: .9rem; }
+.data-table tbody tr:hover { background: #f8fafc; }
+.empty-state { padding-block: 2rem !important; color: var(--color-muted) !important; text-align: center !important; }
+.pagination-wrap { margin-block-start: 1rem; }
+.status-badge--danger { background: #fee2e2; color: #991b1b; }
 .field { display: grid; gap: .4rem; }
 .field label { color: var(--color-primary-strong); font-size: .9rem; font-weight: 700; }
 .field label span { color: var(--color-danger); }
@@ -182,6 +193,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--color-primary); 
     .sidebar__nav { display: flex; overflow-x: auto; padding-block-end: .15rem; }
     .nav-link { flex: 0 0 auto; }
     .requirements-grid, .field-grid { grid-template-columns: 1fr; }
+    .field--full { grid-column: auto; }
     .section-heading, .page-header { align-items: flex-start; flex-direction: column; }
 }
 

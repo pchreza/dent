@@ -48,4 +48,24 @@ class Tenant extends Model
     {
         return $this->hasMany(AuditEvent::class);
     }
+
+    public function branches(): HasMany
+    {
+        return $this->hasMany(Branch::class);
+    }
+
+    public function practitioners(): HasMany
+    {
+        return $this->hasMany(Practitioner::class);
+    }
+
+    public function staff(): HasMany
+    {
+        return $this->hasMany(ClinicStaff::class);
+    }
+
+    public function settings(): HasMany
+    {
+        return $this->hasMany(ClinicSetting::class);
+    }
 }

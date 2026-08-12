@@ -39,6 +39,12 @@
                 <p class="sidebar__caption">مدیریت سامانه</p>
                 <nav class="sidebar__nav">
                     <a class="nav-link nav-link--active" href="{{ route('dashboard') }}">داشبورد</a>
+                    @if (auth()->user()->isSystemAdmin())
+                        <a class="nav-link" href="{{ route('tenants.index') }}">کلینیک‌ها</a>
+                    @endif
+                    @if (session('active_tenant_id'))
+                        <a class="nav-link" href="{{ route('branches.index') }}">شعبه‌ها</a>
+                    @endif
                     <span class="nav-link nav-link--disabled">بیماران <small>به‌زودی</small></span>
                     <span class="nav-link nav-link--disabled">تقویم و نوبت <small>به‌زودی</small></span>
                     <span class="nav-link nav-link--disabled">گزارش‌ها <small>به‌زودی</small></span>
