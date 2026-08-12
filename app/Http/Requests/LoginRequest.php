@@ -19,7 +19,9 @@ class LoginRequest extends FormRequest
         $identifier = (string) $this->input('identifier', '');
 
         $this->merge([
-            'identifier' => NormalizeIdentifier::mobile($identifier),
+            // Preserve usernames while converting Persian/Arabic digits in mobile numbers.
+            // AuthController will safely try both the mobile and username variants.
+            'identifier' => NormalizeIdentifier::digits($identifier),
         ]);
     }
 
@@ -29,6 +31,17 @@ class LoginRequest extends FormRequest
             'identifier' => ['required', 'string', 'max:80'],
             'password' => ['required', 'string', 'min:1', 'max:200'],
             'remember' => ['nullable', 'boolean'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'identifier.required' => 'واردکردن شمارهٔ موبایل یا نام کاربری الزامی است.',
+            'identifier.max' => 'شمارهٔ موبایل یا نام کاربری نباید بیشتر از ۸۰ نویسه باشد.',
+            'password.required' => 'واردکردن رمز عبور الزامی است.',
+            'password.min' => 'رمز عبور نامعتبر است.',
+            'password.max' => 'رمز عبور نامعتبر است.',
         ];
     }
 }

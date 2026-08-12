@@ -39,6 +39,33 @@ final class AuthenticationTest extends TestCase
         $this->assertNotNull($user->fresh()->last_login_at);
     }
 
+    public function test_user_can_login_with_username_and_password(): void
+    {
+        $user = User::factory()->create([
+            'username' => 'superadmin',
+            'password' => 'correct horse battery staple',
+        ]);
+
+        $response = $this->post('/login', [
+            'identifier' => 'SuperAdmin',
+            'password' => 'correct horse battery staple',
+        ]);
+
+        $response->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_login_validation_uses_persian_required_message(): void
+    {
+        $response = $this->from('/login')->post('/login', []);
+
+        $response->assertRedirect('/login');
+        $response->assertSessionHasErrors([
+            'identifier' => 'واردکردن شمارهٔ موبایل یا نام کاربری الزامی است.',
+            'password' => 'واردکردن رمز عبور الزامی است.',
+        ]);
+    }
+
     public function test_inactive_user_cannot_login(): void
     {
         User::factory()->inactive()->create([
