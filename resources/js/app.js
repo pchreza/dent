@@ -1,22 +1,62 @@
 const toothInput = document.querySelector('[data-dental-tooth-input]');
+const toothButtons = [...document.querySelectorAll('[data-dental-tooth]')];
+const selectedTooth = document.querySelector('[data-dental-selected-tooth]');
+const selectedTitle = document.querySelector('[data-dental-selected-title]');
+const selectedStatus = document.querySelector('[data-dental-selected-status]');
 
-if (toothInput instanceof HTMLSelectElement) {
-    document.querySelectorAll('[data-dental-tooth]').forEach((button) => {
-        button.addEventListener('click', () => {
-            const toothCode = button.getAttribute('data-dental-tooth');
+const selectDentalTooth = (button, shouldFocusForm = false) => {
+    const toothCode = button.getAttribute('data-dental-tooth');
+    const statusLabel = button.getAttribute('data-dental-status-label') ?? 'بدون وضعیت ثبت‌شده';
 
-            if (!toothCode) {
-                return;
-            }
+    if (!toothCode) {
+        return;
+    }
 
-            toothInput.value = toothCode;
-            toothInput.focus();
+    toothButtons.forEach((toothButton) => {
+        toothButton.setAttribute('aria-pressed', String(toothButton === button));
+    });
+
+    if (toothInput instanceof HTMLSelectElement) {
+        toothInput.value = toothCode;
+    }
+
+    if (selectedTooth) {
+        selectedTooth.textContent = toothCode;
+    }
+    if (selectedTitle) {
+        selectedTitle.textContent = `دندان ${toothCode} انتخاب شد`;
+    }
+    if (selectedStatus) {
+        selectedStatus.textContent = `آخرین وضعیت: ${statusLabel}`;
+    }
+
+    if (shouldFocusForm && toothInput instanceof HTMLSelectElement) {
+        toothInput.focus();
+        if (window.matchMedia('(max-width: 1040px)').matches) {
             document.querySelector('#chart-entry')?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
             });
-        });
+        }
+    }
+};
+
+if (toothInput instanceof HTMLSelectElement) {
+    toothButtons.forEach((button) => {
+        button.addEventListener('click', () => selectDentalTooth(button, true));
     });
+
+    toothInput.addEventListener('change', () => {
+        const matchingButton = toothButtons.find((button) => button.getAttribute('data-dental-tooth') === toothInput.value);
+        if (matchingButton) {
+            selectDentalTooth(matchingButton);
+        }
+    });
+
+    const initialButton = toothButtons.find((button) => button.getAttribute('data-dental-tooth') === toothInput.value);
+    if (initialButton) {
+        selectDentalTooth(initialButton);
+    }
 }
 
 const treatmentItems = document.querySelector('[data-treatment-items]');
