@@ -14,8 +14,8 @@ composer install --no-interaction --prefer-dist --no-scripts
 composer dump-autoload --optimize --no-scripts
 php artisan key:generate --force
 php artisan package:discover --ansi
-php artisan optimize:clear
 php artisan migrate --force
+php artisan optimize:clear
 ```
 
 در **Command Prompt ویندوز** به‌جای `rm -rf vendor` از این دستور استفاده کنید:

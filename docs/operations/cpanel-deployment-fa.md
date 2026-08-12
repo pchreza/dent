@@ -21,7 +21,6 @@ release.zip
 ├── resources/
 ├── routes/
 ├── storage/
-├── vendor/
 ├── .env.example
 ├── artisan
 ├── composer.json
@@ -30,21 +29,22 @@ release.zip
 └── INSTALL.md
 ```
 
-`public/` باید Document Root باشد. `.env` واقعی، فایل‌های بکاپ، Log و فایل‌های پزشکی نباید در Git یا ZIP عمومی قرار بگیرند.
+`public/` باید Document Root باشد. `.env` واقعی، فایل‌های بکاپ، Log و فایل‌های پزشکی نباید در Git یا ZIP عمومی قرار بگیرند. Release تمیز `vendor/` را ندارد؛ Composer باید روی مقصد از روی `composer.lock` اجرا شود.
 
 ## 3. مراحل نصب
 
 1. ایجاد Database و User در cPanel.
-2. Upload و Extract بستهٔ انتشار.
+2. Upload و Extract بستهٔ انتشار تمیز.
 3. تنظیم Document Root روی `public` یا استفاده از مسیر امن معادل.
 4. بازکردن `/install` و پذیرش شرایط.
 5. بررسی نسخهٔ PHP و افزونه‌ها، پوشه‌ها و حافظه.
 6. ورود اطلاعات MySQL و تست اتصال.
 7. تنظیم نام محصول، برند، منطقهٔ زمانی، لوگو و کاربر سوپرادمین.
-8. اجرای Migration و Seed در تراکنش‌های قابل کنترل.
-9. ثبت APP_KEY و تنظیم Storage.
-10. قفل نصب و تست ورود.
-11. نمایش دستور Cron و لینک Health Check.
+8. اجرای `composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader` از طریق SSH، Terminal داخلی، Composer Manager یا پشتیبانی هاست.
+9. اجرای Migration و Seed در تراکنش‌های قابل کنترل.
+10. ثبت APP_KEY و تنظیم Storage.
+11. قفل نصب و تست ورود.
+12. نمایش دستور Cron و لینک Health Check.
 
 در صورت خطا، ویزارد باید مرحله، پیام فارسی ساده، کد پیگیری و Log امن ارائه کند و از ایجاد نصب نیمه‌کارهٔ غیرقابل بازیابی جلوگیری نماید.
 
@@ -103,7 +103,7 @@ Jobهای زمان‌بندی‌شده:
 
 ## 8. وضعیت بستهٔ فعلی پروژه
 
-نسخهٔ فعلی شامل نصب، احراز هویت، چندمستاجری، مدیریت کلینیک و شعبه، کاربران پزشک/منشی، فرم QR بیمار، صف تأیید، پروندهٔ پایه، تقویم نوبت فارسی، مراحل درمان، طرح درمان، فاکتور/پرداخت، اعلان داخلی و تنظیم فونت است. برای تولید باید `APP_ENV=production`، `APP_DEBUG=false`، `APP_TIMEZONE=Asia/Tehran`، `APP_URL` واقعی، اتصال MySQL، SSL و Permissionهای امن تنظیم شوند.
+نسخهٔ فعلی شامل نصب، احراز هویت، چندمستاجری، مدیریت کلینیک و شعبه، کاربران پزشک/منشی، فرم QR بیمار، صف تأیید، پروندهٔ پایه، تقویم نوبت فارسی، مراحل درمان، طرح درمان، فاکتور/پرداخت، اعلان داخلی و تنظیم فونت است. Release تمیز `vendor/` ندارد و باید در مقصد با Composer بر اساس `composer.lock` نصب شود. برای تولید باید `APP_ENV=production`، `APP_DEBUG=false`، `APP_TIMEZONE=Asia/Tehran`، `APP_URL` واقعی، اتصال MySQL، SSL و Permissionهای امن تنظیم شوند.
 
 در بستهٔ تحویل، `.env` واقعی و دادهٔ محلی قرار نمی‌گیرد. پس از Extract باید `.env` ساخته شود، `php artisan key:generate` یا مقدار APP_KEY امن ثبت شود، Document Root روی `public` قرار گیرد، `php artisan migrate --force` اجرا شود و سپس `/install` برای ساخت سوپرادمین اولیه باز شود. قبل از فعال‌سازی عمومی، مسیر `/install`، لاگ، Cron، Storage و بکاپ آزمایشی کنترل شوند.
 

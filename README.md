@@ -1,68 +1,129 @@
-# Disweb Dental SaaS
+# Dent Dental SaaS
 
-پلتفرم SaaS چندمستاجری مدیریت کلینیک‌های دندان‌پزشکی، با PHP/Laravel، MySQL، رابط فارسی و راست‌چین، فونت آفلاین Vazirmatn و هدف استقرار روی cPanel بدون SSH.
+پلتفرم SaaS چندمستاجری مدیریت کلینیک‌های دندان‌پزشکی با **PHP/Laravel 12**، MySQL، رابط فارسی و راست‌چین، فونت آفلاین Vazirmatn و معماری مناسب استقرار روی cPanel.
 
-## وضعیت پروژه
+> وضعیت فعلی: **MVP قابل انتشار برای staging و نصب آزمایشی**. قبل از استفاده با اطلاعات واقعی بیماران، اتصال MySQL، HTTPS، Backup، Cron و Smoke Test روی هاست واقعی باید تأیید شوند.
 
-فاز صفر تکمیل شده است و فاز یک در حال توسعه است. خروجی فاز صفر شامل معماری، مدل داده، نیازمندی MVP، مدل تهدید، استراتژی تست، قرارداد RTL و راهنمای cPanel در پوشهٔ `docs/` قرار دارد.
+## قابلیت‌های نسخهٔ فعلی
 
-> هیچ فازی بدون تست، گزارش خطا، رفع Regression و گیت پذیرش تکمیل‌شده تلقی نمی‌شود.
+این نسخه شامل ویزارد نصب، احراز هویت موبایل/نام کاربری، سوپرادمین، جداسازی Tenant، مدیریت کلینیک و شعبه، مدیریت پزشک و منشی، نقش و مجوز، ثبت بیمار با QR و صف تأیید، پروندهٔ پایه، حساسیت و دارو، اعلان داخلی، تقویم هفتگی شمسی، نوبت‌دهی و کنترل هم‌پوشانی، مراحل و طرح درمان، فاکتور و پرداخت، Audit و تنظیم فونت پنل است.
 
-## فناوری
+قابلیت‌های نمودار گرافیکی دندان، فایل پزشکی، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، پورتال کامل بیمار، گزارش‌ساز پیشرفته، Queue تولیدی و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند.
 
-| بخش | فناوری |
+## فناوری و الزامات
+
+| بخش | مقدار |
 |---|---|
-| Backend | PHP 8.2/8.3، Laravel 12، معماری مونولیت ماژولار |
-| Database | MySQL 8 در تولید؛ SQLite برای تست‌های محلی |
-| UI | Blade، Vite، CSS منطقی RTL؛ Livewire/Alpine در فازهای تعاملی |
-| Font | Vazirmatn به‌صورت آفلاین در `public/fonts` |
-| Testing | PHPUnit/Laravel Test، Laravel Pint |
-| Deployment | cPanel، ویزارد نصب، Cron Job، بستهٔ self-contained با Vendor |
+| Backend | PHP 8.2/8.3 و Laravel 12 |
+| Database | MySQL در تولید؛ SQLite برای توسعه/تست |
+| Frontend | Blade، Vite و CSS راست‌چین |
+| Font | Vazirmatn محلی در `public/fonts` |
+| Web root | حتماً پوشهٔ `public` |
+| Production | HTTPS، `APP_DEBUG=false` و Backup الزامی |
 
-## نصب توسعه
+## دانلود Release تمیز
+
+هر Release رسمی با الگوی `dent-release-{version}-cpanel.zip` و فایل SHA256 منتشر می‌شود. این ZIP عمداً **بدون `vendor`، `node_modules`، `.env`، `.git`، Log، Cache، SQLite محلی، فایل Backup و تست‌های توسعه** ساخته می‌شود. این کار از انتقال اطلاعات محیط سازنده و وابستگی به فایل‌های اضافی جلوگیری می‌کند.
+
+پس از دانلود، SHA256 را با فایل `.sha256` مقایسه کنید. فایل `composer.lock` داخل Release وجود دارد و نسخهٔ دقیق وابستگی‌ها را تثبیت می‌کند. پوشه‌های runtime لازم مانند `bootstrap/cache` و `storage` با ساختار خالی داخل بسته باقی می‌مانند، اما cacheهای PHP تولیدشده در محیط توسعه هرگز منتشر نمی‌شوند.
+
+## نصب روی Windows/Laragon
+
+پیش‌نیازها PHP 8.2 یا 8.3، Composer و SQLite یا MySQL هستند. ZIP را Extract کنید، Laragon/Terminal را باز کنید و از ریشهٔ پروژه، یعنی جایی که `composer.json` و `artisan` قرار دارند، فایل `install-laragon.bat` را اجرا کنید. این فایل در صورت نبودن `vendor`، وابستگی‌های کامل را از روی `composer.lock` نصب می‌کند و سپس `.env`، APP_KEY، package discovery، cache و migration را آماده می‌سازد.
+
+اگر Composer قبلاً روی `vendor` ناقص اجرا شده است، در Git Bash این دستورات را اجرا کنید:
 
 ```bash
-composer install
+rm -rf vendor
+composer install --no-interaction --prefer-dist --no-scripts
+composer dump-autoload --optimize --no-scripts
 cp .env.example .env
-php artisan key:generate
-php artisan migrate:fresh --seed
-pnpm install
-pnpm run build
-php artisan serve
+touch database/database.sqlite
+php artisan key:generate --force
+php artisan package:discover --ansi
+php artisan migrate --force
+php artisan optimize:clear
 ```
 
-در اولین اجرای واقعی، مسیر `/install` ویزارد نصب را نمایش می‌دهد. در محیط توسعهٔ تستی، SQLite در `phpunit.xml` استفاده می‌شود. برای تولید، `DB_CONNECTION=mysql` و اطلاعات MySQL cPanel تنظیم می‌شوند.
+در Command Prompt ویندوز به‌جای `rm -rf vendor` از `rmdir /s /q vendor` استفاده کنید. فایل `composer.lock` را حذف نکنید.
 
-## تست و کیفیت
+## نصب روی cPanel با SSH یا Terminal
+
+در cPanel دیتابیس و User بسازید، ZIP تمیز را خارج از `public_html` Extract کنید و Document Root را روی پوشهٔ `public` قرار دهید. از `.env.example` یک `.env` بسازید و `APP_ENV=production`، `APP_DEBUG=false`، `APP_URL` با HTTPS، `APP_TIMEZONE=Asia/Tehran`، `APP_LOCALE=fa` و تنظیمات MySQL را وارد کنید.
+
+سپس در مسیر پروژه اجرا کنید:
 
 ```bash
-php artisan test
-vendor/bin/pint --test
-pnpm run build
+composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+php artisan key:generate --force
+php artisan migrate --force
+php artisan optimize:clear
 ```
 
-تست‌ها باید شامل Unit، Feature، امنیت، جداسازی Tenant، RTL و در فازهای عملیاتی شامل نصب/ارتقا/بکاپ باشند. کد با `declare(strict_types=1)` و نام‌گذاری روشن نوشته می‌شود.
+بعد آدرس `/install` را باز کنید و سوپرادمین اولیه را بسازید. مسیر نصب پس از تکمیل قفل می‌شود.
 
-## ساختار مستندات
+## نصب cPanel بدون SSH
 
-- `docs/phase-0-report-fa.md`: گزارش فاز صفر و Backlog فاز یک.
-- `docs/architecture/phase-0-architecture-fa.md`: معماری و لایه‌ها.
-- `docs/architecture/domain-model-fa.md`: مدل دامنه و طرح جداول.
-- `docs/product/mvp-requirements-fa.md`: نیازمندی‌های MVP و معیار پذیرش.
-- `docs/security/threat-model-fa.md`: مدل تهدید و کنترل امنیتی.
-- `docs/qa/phase-0-test-strategy-fa.md`: راهبرد تست و تعریف Done.
-- `docs/ux/rtl-design-spec-fa.md`: قرارداد RTL، دسترس‌پذیری و Design System.
-- `docs/operations/cpanel-deployment-fa.md`: نصب، Cron، بکاپ و ارتقا روی cPanel.
-- `docs/adr/`: تصمیم‌های معماری ثبت‌شده.
+Release تمیز بدون `vendor` است؛ بنابراین هاست باید یکی از این امکانات را داشته باشد: Composer Manager/Setup PHP App در cPanel، Terminal داخلی، یا اجرای Composer توسط پشتیبانی هاست. در Composer Manager مسیر پروژه را انتخاب کنید و دستور زیر را اجرا کنید:
 
-## قواعد محصول
+```bash
+composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+```
 
-هر کلینیک یک Tenant مستقل است. دادهٔ Tenant از ورودی خام کاربر resolve نمی‌شود و باید از Context معتبر، عضویت یا Support Access سوپرادمین به‌دست آید. حذف پیش‌فرض بایگانی است. دسترسی‌های View/Create/Edit/Archive/Print/Export در سمت سرور Policy می‌شوند و UI فقط بازتاب آن‌ها است.
+اگر Composer Manager و Terminal وجود ندارد، از پشتیبانی بخواهید همین Composer command را در مسیر پروژه اجرا کند. **فایل PHP عمومی برای اجرای `shell_exec` یا Composer روی اینترنت نسازید.** اگر هاست نه Composer دارد، نه Terminal و نه همکاری پشتیبانی، Laravel روی آن هاست قابل نصب و نگهداری مطمئن نیست.
 
-## امنیت و استقرار
+پس از ساخته‌شدن `vendor`، `.env` را در File Manager تنظیم کنید، Document Root را روی `public` بگذارید و `/install` را در مرورگر باز کنید. راهنمای کامل در [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) قرار دارد.
 
-در تولید HTTPS اجباری است. `.env`، کلیدها، Log و فایل‌های پزشکی نباید در Git یا public قرار گیرند. پیش از هر ارتقا باید بکاپ کامل گرفته شود و شکست Migration باید مسیر بازیابی داشته باشد. جزئیات خطای فنی به بیمار یا کارمند نمایش داده نمی‌شود و فقط کد پیگیری فارسی ارائه می‌گردد.
+## Cron در cPanel بدون SSH
 
-## مالکیت و برند
+از بخش **Cron Jobs** یک Job هر دقیقه بسازید. مسیر PHP به شرکت هاست بستگی دارد؛ نمونه‌ها:
 
-برند محصول در تنظیمات سوپرادمین قابل تغییر است. نام مالک اعلام‌شدهٔ پروژه، شرکت Disweb با نشانی `disweb.ir` است. مجوز وابستگی‌ها و دارایی‌های فونت باید در تحویل نهایی مستند شوند.
+```text
+/usr/local/bin/php /home/USERNAME/app/artisan schedule:run >> /dev/null 2>&1
+```
+
+یا:
+
+```text
+/opt/cpanel/ea-php83/root/usr/bin/php /home/USERNAME/app/artisan schedule:run >> /dev/null 2>&1
+```
+
+`USERNAME` و مسیر پروژه را تغییر دهید. یادآوری نوبت، Backup و Jobهای زمان‌بندی‌شده بدون Cron اجرا نمی‌شوند.
+
+## ارتقای نسخه
+
+ابتدا از دیتابیس، Storage و `.env` Backup بگیرید. Release جدید را در پوشهٔ موقت Extract کنید و `.env` و فایل‌های کاربر را از نسخهٔ قبلی حفظ کنید. فایل‌های برنامه را جایگزین کنید، سپس Composer را بر اساس `composer.lock` اجرا کنید و Migration را اعمال نمایید:
+
+```bash
+composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize:clear
+```
+
+بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
+
+## توسعه و تست
+
+برای توسعه، پس از `composer install` از `.env.example` یک `.env` بسازید، SQLite را ایجاد کنید، سپس `pnpm install` و `pnpm run build` را اجرا کنید. کنترل‌های پذیرش عبارت‌اند از:
+
+```bash
+composer validate --strict
+composer audit
+vendor/bin/pint --test
+php artisan view:cache
+php artisan test
+pnpm run build
+git diff --check
+```
+
+هر فاز فقط پس از تست، رفع خطا، Regression و گزارش QA قابل قبول است.
+
+## ساختار مستندات و سیاست انتشار
+
+معماری، نیازمندی‌ها، امنیت، UX/RTL، استقرار cPanel، راهنمای بدون SSH و گزارش‌های QA در [`docs/`](docs/) قرار دارند. سیاست رسمی ساخت ZIP تمیز در [`docs/operations/release-policy-fa.md`](docs/operations/release-policy-fa.md) است.
+
+هر آپدیت باید در همان Commit، README و CHANGELOG را به‌روز کند، از Commit مشخص ساخته شود، فایل SHA256 داشته باشد و در ZIP هیچ `.env`، `vendor`، `node_modules`، Log، Cache، دادهٔ محلی یا فایل توسعه‌ای باقی نگذارد.
+
+## مشارکت و گزارش خطا
+
+برای گزارش خطا، نسخهٔ Release، سیستم‌عامل، PHP، Composer، نوع هاست، آخرین دستور موفق و متن خطا را بدون ارسال رمز دیتابیس، APP_KEY، Session یا اطلاعات بیمار ثبت کنید. قبل از هر اصلاح، از دیتابیس و Storage Backup بگیرید.
