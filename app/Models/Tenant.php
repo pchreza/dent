@@ -85,6 +85,21 @@ class Tenant extends Model
         return $this->hasMany(Notification::class);
     }
 
+    public function treatmentStages(): HasMany
+    {
+        return $this->hasMany(TreatmentStageDefinition::class);
+    }
+
+    public function treatmentPlans(): HasMany
+    {
+        return $this->hasMany(TreatmentPlan::class);
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
     public function hasQrToken(string $token): bool
     {
         return $this->qr_token_hash !== null

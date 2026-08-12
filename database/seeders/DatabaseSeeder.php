@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\MedicalConditionDefinition;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\TreatmentStageDefinition;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -90,6 +92,38 @@ class DatabaseSeeder extends Seeder
                 Permission::query()->whereIn('code', $codes)->pluck('permissions.id')->mapWithKeys(
                     static fn (int $id): array => [$id => ['allowed' => true]],
                 )->all(),
+            );
+        }
+
+        $conditions = [
+            ['code' => 'diabetes', 'name' => 'دیابت'],
+            ['code' => 'hypertension', 'name' => 'فشار خون بالا'],
+            ['code' => 'heart_disease', 'name' => 'بیماری قلبی'],
+            ['code' => 'pregnancy', 'name' => 'بارداری'],
+            ['code' => 'bleeding_disorder', 'name' => 'اختلال انعقاد خون'],
+        ];
+
+        foreach ($conditions as $condition) {
+            MedicalConditionDefinition::query()->updateOrCreate(
+                ['tenant_id' => null, 'code' => $condition['code']],
+                ['name' => $condition['name'], 'is_system' => true, 'is_active' => true],
+            );
+        }
+
+        $stages = [
+            ['code' => 'consultation', 'name' => 'معاینه و تشخیص', 'category' => 'diagnosis', 'sort_order' => 10, 'color' => '#0891B2'],
+            ['code' => 'filling', 'name' => 'ترمیم و پرکردن', 'category' => 'restorative', 'sort_order' => 20, 'color' => '#0E7490'],
+            ['code' => 'root_canal', 'name' => 'عصب‌کشی', 'category' => 'endodontics', 'sort_order' => 30, 'color' => '#7C3AED'],
+            ['code' => 'crown', 'name' => 'روکش', 'category' => 'prosthodontics', 'sort_order' => 40, 'color' => '#DB2777'],
+            ['code' => 'implant', 'name' => 'ایمپلنت', 'category' => 'implant', 'sort_order' => 50, 'color' => '#EA580C'],
+            ['code' => 'surgery', 'name' => 'جراحی', 'category' => 'surgery', 'sort_order' => 60, 'color' => '#B42318'],
+            ['code' => 'follow_up', 'name' => 'پیگیری و مراقبت', 'category' => 'follow_up', 'sort_order' => 70, 'color' => '#059669'],
+        ];
+
+        foreach ($stages as $stage) {
+            TreatmentStageDefinition::query()->updateOrCreate(
+                ['tenant_id' => null, 'code' => $stage['code']],
+                [...$stage, 'is_active' => true],
             );
         }
     }

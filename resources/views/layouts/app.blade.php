@@ -3,6 +3,13 @@
     $brandName = app(\App\Support\PlatformSettings::class)->get('brand_name', 'Disweb');
     $canViewPatients = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'patients.view');
     $canReviewQr = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'patients.create');
+    $unreadNotifications = auth()->check() && session('active_tenant_id') ? auth()->user()->notifications()->where('tenant_id', session('active_tenant_id'))->where('status', 'unread')->count() : 0;
+    $defaultFont = app(\App\Support\PlatformSettings::class)->get('default_font', 'Vazirmatn');
+    $fontFamily = match ($defaultFont) {
+        'Tahoma' => 'Tahoma, sans-serif',
+        'Arial' => 'Arial, sans-serif',
+        default => "'Vazirmatn', Tahoma, sans-serif",
+    };
 @endphp
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -12,6 +19,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? $platformName }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>body { font-family: {{ $fontFamily }}; }</style>
 </head>
 <body class="app-shell">
     <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
@@ -43,19 +51,37 @@
                     <a class="nav-link nav-link--active" href="{{ route('dashboard') }}">داشبورد</a>
                     @if (auth()->user()->isSystemAdmin())
                         <a class="nav-link" href="{{ route('tenants.index') }}">کلینیک‌ها</a>
+                        <a class="nav-link" href="{{ route('tenants.admin.settings.appearance') }}">تنظیمات ظاهر</a>
                     @endif
                     @if (session('active_tenant_id'))
                         <a class="nav-link" href="{{ route('branches.index') }}">شعبه‌ها</a>
+                    @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'users.view'))
+                        <a class="nav-link" href="{{ route('clinic-users.index') }}">کاربران کلینیک</a>
                     @endif
                     @if ($canViewPatients && session('active_tenant_id'))
                         <a class="nav-link" href="{{ route('patients.index') }}">بیماران</a>
                     @else
                         <span class="nav-link nav-link--disabled">بیماران <small>محدود</small></span>
                     @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'scheduling.view'))
+                        <a class="nav-link" href="{{ route('calendar.index') }}">تقویم نوبت‌ها</a>
+                    @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'scheduling.create'))
+                        <a class="nav-link" href="{{ route('appointments.create') }}">ثبت نوبت</a>
+                    @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'treatments.update'))
+                        <a class="nav-link" href="{{ route('treatment-stages.index') }}">مراحل درمان</a>
+                    @endif
+                    @if (session('active_tenant_id') && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'finance.view'))
+                        <a class="nav-link" href="{{ route('invoices.index') }}">فاکتورها</a>
+                    @endif
                     @if ($canReviewQr && session('active_tenant_id'))
                         <a class="nav-link" href="{{ route('qr-requests.index') }}">درخواست‌های QR</a>
                     @endif
-                    <span class="nav-link nav-link--disabled">تقویم و نوبت <small>به‌زودی</small></span>
+                    @if (session('active_tenant_id'))
+                        <a class="nav-link" href="{{ route('notifications.index') }}">اعلان‌ها @if ($unreadNotifications > 0)<small>{{ $unreadNotifications }}</small>@endif</a>
+                    @endif
                     <span class="nav-link nav-link--disabled">گزارش‌ها <small>به‌زودی</small></span>
                 </nav>
             </aside>

@@ -7,7 +7,10 @@
         <h1>{{ $patient->fullName() }}</h1>
         <p class="muted">آخرین به‌روزرسانی: <span dir="ltr"><bdi>{{ $patient->updated_at?->format('Y-m-d H:i') }}</bdi></span></p>
     </div>
-    <a class="button button--ghost" href="{{ route('patients.index') }}">بازگشت به بیماران</a>
+    <div class="inline-actions">
+        <a class="button button--primary" href="{{ route('treatment-plans.create', ['patientId' => $patient->id]) }}">ایجاد طرح درمان</a>
+        <a class="button button--ghost" href="{{ route('patients.index') }}">بازگشت به بیماران</a>
+    </div>
 </div>
 
 @if ($patient->hasCriticalAllergy())

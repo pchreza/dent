@@ -50,6 +50,13 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'tenant_user', 'user_id', 'role_id')
+            ->withPivot(['tenant_id', 'branch_id', 'scope', 'status'])
+            ->withTimestamps();
+    }
+
     public function auditEvents(): HasMany
     {
         return $this->hasMany(AuditEvent::class, 'actor_id');

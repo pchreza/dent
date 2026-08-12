@@ -5,7 +5,7 @@
     <div>
         <span class="eyebrow">نمای کلی سامانه</span>
         <h1>داشبورد</h1>
-        <p class="muted">هستهٔ فاز اول آماده است؛ ماژول‌های عملیاتی طبق نقشه‌راه اضافه می‌شوند.</p>
+        <p class="muted">هستهٔ فاز عملیاتی آماده است؛ نقش فعال شما: <strong>{{ $currentRole ?: 'کاربر کلینیک' }}</strong>.</p>
     </div>
     <span class="status-badge status-badge--success">سامانه فعال</span>
 </div>
@@ -37,7 +37,7 @@
     </article>
     <article class="metric-card">
         <span class="metric-card__label">حساب جاری</span>
-        <strong>{{ auth()->user()->isSystemAdmin() ? 'سوپرادمین' : 'کاربر فعال' }}</strong>
+        <strong>{{ $currentRole ?: 'کاربر فعال' }}</strong>
         <small>{{ auth()->user()->mobile }}</small>
     </article>
     <article class="metric-card">
