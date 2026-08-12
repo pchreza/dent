@@ -34,6 +34,15 @@ if not exist ".env" (
 
 if not exist "database\database.sqlite" type nul > "database\database.sqlite"
 
+rem Laravel براي cache، session، view و log به اين مسيرهاي writable نياز دارد.
+for %%D in ("bootstrap\cache" "storage\logs" "storage\framework\cache" "storage\framework\sessions" "storage\framework\views" "storage\framework\testing" "storage\app\private") do (
+    if not exist "%%~D" mkdir "%%~D"
+    if not exist "%%~D" (
+        echo [ERROR] ساخت پوشه runtime %%~D ناموفق بود.
+        exit /b 1
+    )
+)
+
 rem ابتدا بدون script autoload را بازسازي مي‌کنيم تا در نصب ناقص، Composer script زودهنگام اجرا نشود.
 composer dump-autoload --optimize --no-scripts
 if errorlevel 1 (
@@ -45,9 +54,10 @@ php artisan key:generate --force
 if errorlevel 1 exit /b 1
 php artisan package:discover --ansi
 if errorlevel 1 exit /b 1
-php artisan optimize:clear
-if errorlevel 1 exit /b 1
+rem Migration پيش از optimize:clear اجرا مي‌شود، چون cache/session محلي از database استفاده مي‌کنند.
 php artisan migrate --force
+if errorlevel 1 exit /b 1
+php artisan optimize:clear
 if errorlevel 1 exit /b 1
 
  echo.

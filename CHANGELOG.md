@@ -1,5 +1,9 @@
 # تغییرات نسخهٔ آزمایشی
 
+## نسخهٔ 0.1.3 — 2026-08-12
+
+اسکریپت `install-laragon.bat` اصلاح شد تا مسیرهای runtime موردنیاز Laravel، به‌ویژه `storage/framework/views`، پیش از اجرای Artisan ساخته شوند. همچنین ترتیب نصب به‌گونه‌ای تغییر کرد که Migration پیش از `optimize:clear` اجرا شود؛ به این ترتیب خطای `View path not found` و وابستگی زودهنگام cache به جدول‌های database در نصب محلی برطرف می‌شود.
+
 ## نسخهٔ 0.1.2 — 2026-08-12
 
 اسکریپت Release تمیز اصلاح شد تا فایل‌های cache PHP محیط توسعه، از جمله manifestهای وابسته به Laravel Pail، وارد ZIP عمومی نشوند؛ در عین حال `bootstrap/cache` و مسیرهای runtime موردنیاز Laravel به‌صورت ساختار خالی باقی می‌مانند. Smoke Test از ZIP استخراج‌شده با نصب `composer --no-dev`، تولید APP_KEY، package discovery، migration، پاک‌سازی cache و اجرای Laravel 12.66.0 با موفقیت کامل شد. ترتیب دستورات نصب Laragon و cPanel نیز برای اجرای Migration پیش از `optimize:clear` همگام شد.

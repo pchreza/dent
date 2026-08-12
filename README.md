@@ -29,7 +29,7 @@
 
 ## نصب روی Windows/Laragon
 
-پیش‌نیازها PHP 8.2 یا 8.3، Composer و SQLite یا MySQL هستند. ZIP را Extract کنید، Laragon/Terminal را باز کنید و از ریشهٔ پروژه، یعنی جایی که `composer.json` و `artisan` قرار دارند، فایل `install-laragon.bat` را اجرا کنید. این فایل در صورت نبودن `vendor`، وابستگی‌های کامل را از روی `composer.lock` نصب می‌کند و سپس `.env`، APP_KEY، package discovery، cache و migration را آماده می‌سازد.
+پیش‌نیازها PHP 8.2 یا 8.3، Composer و SQLite یا MySQL هستند. ZIP را Extract کنید، Laragon/Terminal را باز کنید و از ریشهٔ پروژه، یعنی جایی که `composer.json` و `artisan` قرار دارند، فایل `install-laragon.bat` را اجرا کنید. این فایل در صورت نبودن `vendor`، وابستگی‌های کامل را از روی `composer.lock` نصب می‌کند، مسیرهای runtime شامل cache قالب‌های Blade را می‌سازد و سپس `.env`، APP_KEY، package discovery، migration و cache را به‌ترتیب صحیح آماده می‌سازد.
 
 اگر Composer قبلاً روی `vendor` ناقص اجرا شده است، در Git Bash این دستورات را اجرا کنید:
 
