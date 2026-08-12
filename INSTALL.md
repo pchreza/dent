@@ -4,6 +4,22 @@
 
 هاست باید PHP 8.2 یا 8.3، MySQL سازگار، افزونه‌های PDO MySQL، Mbstring، OpenSSL، XML، Ctype، JSON، Fileinfo، Tokenizer و Curl، SSL فعال و امکان تنظیم Document Root و Cron داشته باشد.
 
+## رفع خطای Autoload در Laragon/Windows
+
+اگر با خطای `Class Illuminate\\Foundation\\Application not found` یا `Illuminate\\Foundation\\ComposerScripts is not autoloadable` روبه‌رو شدید، ابتدا `vendor` ناقص را حذف و وابستگی‌ها را نصب کنید؛ `composer dump-autoload` به‌تنهایی framework حذف‌شده را دانلود نمی‌کند:
+
+```bash
+rm -rf vendor
+composer install --no-interaction --prefer-dist --no-scripts
+composer dump-autoload --optimize --no-scripts
+php artisan key:generate --force
+php artisan package:discover --ansi
+php artisan optimize:clear
+php artisan migrate --force
+```
+
+در Command Prompt ویندوز، به‌جای `rm -rf vendor` از `rmdir /s /q vendor` استفاده کنید. همچنین می‌توانید فایل `install-laragon.bat` را از ریشهٔ پروژه اجرا کنید. جزئیات در `docs/operations/laragon-install-fa.md` آمده است.
+
 ## نصب روی cPanel
 
 محتوای بسته را در مسیر امن خارج از `public_html` Extract کنید و Document Root دامنه را روی پوشهٔ `public` قرار دهید. اگر امکان تغییر Document Root ندارید، ساختار هاست را با راهنمای شرکت ارائه‌دهنده هماهنگ کنید و هرگز `app`، `storage`، `.env` و `vendor` را در معرض دانلود عمومی قرار ندهید.

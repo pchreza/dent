@@ -74,3 +74,10 @@
 [3]: ../qa/phase-0-test-strategy-fa.md "استراتژی تست فاز صفر"
 [4]: ../operations/cpanel-deployment-fa.md "استقرار cPanel"
 [5]: phase-5-report-fa.md "گزارش فاز عملیاتی"
+
+
+## اصلاحیهٔ Autoload در Laragon/Windows
+
+پس از گزارش خطای `Illuminate\\Foundation\\Application not found`، علت بازسازی شد: اجرای `composer dump-autoload` روی `vendor` ناقص، بدون نصب مجدد وابستگی‌های Composer. راه‌حل با حذف vendor ناقص، اجرای `composer install --no-scripts`، بازسازی autoload بدون script، اجرای package discovery و سپس Artisan تثبیت شد. این توالی در `install-laragon.bat` و `docs/operations/laragon-install-fa.md` ثبت شده است.
+
+در محیط ایزوله، یک کپیٔ تمیز بدون vendor ساخته شد و مراحل `composer install --no-interaction --prefer-dist --no-scripts`، `composer dump-autoload --optimize --no-scripts`، `php artisan key:generate --force`، `php artisan package:discover --ansi`، `php artisan optimize:clear` و `php artisan migrate:fresh --seed --force` با موفقیت کامل شدند. بنابراین خطای گزارش‌شده از کد Laravel نیست و به vendor ناقص/نصب ناقص وابستگی‌ها مربوط بوده است.

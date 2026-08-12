@@ -9,3 +9,8 @@
 ### Backlog
 
 نمودار گرافیکی دندان، Custom Field کامل، فایل پزشکی، نسخه‌نویسی، SMS/IPPanel، Email، درگاه پرداخت، پورتال بیمار، گزارش‌ساز، Queue/Worker تولیدی، backup/restore UI و تست بار کنترل‌شده در نسخه‌های بعدی تکمیل خواهند شد.
+
+
+## اصلاحیهٔ 0.1.1 — 2026-08-12
+
+خطای نصب در حالتی که `vendor` ناقص است مستندسازی و رفع شد. فایل `install-laragon.bat` اضافه شد تا ابتدا وابستگی‌های کامل Laravel با `composer install --no-scripts` نصب شوند و سپس autoload، package discovery، cache و migration اجرا شوند. راهنمای فارسی `docs/operations/laragon-install-fa.md` نیز اضافه شد. نصب تمیز بدون vendor در محیط ایزوله با موفقیت تأیید شد.
