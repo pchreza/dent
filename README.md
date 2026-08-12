@@ -1,59 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Disweb Dental SaaS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+پلتفرم SaaS چندمستاجری مدیریت کلینیک‌های دندان‌پزشکی، با PHP/Laravel، MySQL، رابط فارسی و راست‌چین، فونت آفلاین Vazirmatn و هدف استقرار روی cPanel بدون SSH.
 
-## About Laravel
+## وضعیت پروژه
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+فاز صفر تکمیل شده است و فاز یک در حال توسعه است. خروجی فاز صفر شامل معماری، مدل داده، نیازمندی MVP، مدل تهدید، استراتژی تست، قرارداد RTL و راهنمای cPanel در پوشهٔ `docs/` قرار دارد.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+> هیچ فازی بدون تست، گزارش خطا، رفع Regression و گیت پذیرش تکمیل‌شده تلقی نمی‌شود.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## فناوری
 
-## Learning Laravel
+| بخش | فناوری |
+|---|---|
+| Backend | PHP 8.2/8.3، Laravel 12، معماری مونولیت ماژولار |
+| Database | MySQL 8 در تولید؛ SQLite برای تست‌های محلی |
+| UI | Blade، Vite، CSS منطقی RTL؛ Livewire/Alpine در فازهای تعاملی |
+| Font | Vazirmatn به‌صورت آفلاین در `public/fonts` |
+| Testing | PHPUnit/Laravel Test، Laravel Pint |
+| Deployment | cPanel، ویزارد نصب، Cron Job، بستهٔ self-contained با Vendor |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## نصب توسعه
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate:fresh --seed
+pnpm install
+pnpm run build
+php artisan serve
+```
 
-## Laravel Sponsors
+در اولین اجرای واقعی، مسیر `/install` ویزارد نصب را نمایش می‌دهد. در محیط توسعهٔ تستی، SQLite در `phpunit.xml` استفاده می‌شود. برای تولید، `DB_CONNECTION=mysql` و اطلاعات MySQL cPanel تنظیم می‌شوند.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## تست و کیفیت
 
-### Premium Partners
+```bash
+php artisan test
+vendor/bin/pint --test
+pnpm run build
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+تست‌ها باید شامل Unit، Feature، امنیت، جداسازی Tenant، RTL و در فازهای عملیاتی شامل نصب/ارتقا/بکاپ باشند. کد با `declare(strict_types=1)` و نام‌گذاری روشن نوشته می‌شود.
 
-## Contributing
+## ساختار مستندات
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- `docs/phase-0-report-fa.md`: گزارش فاز صفر و Backlog فاز یک.
+- `docs/architecture/phase-0-architecture-fa.md`: معماری و لایه‌ها.
+- `docs/architecture/domain-model-fa.md`: مدل دامنه و طرح جداول.
+- `docs/product/mvp-requirements-fa.md`: نیازمندی‌های MVP و معیار پذیرش.
+- `docs/security/threat-model-fa.md`: مدل تهدید و کنترل امنیتی.
+- `docs/qa/phase-0-test-strategy-fa.md`: راهبرد تست و تعریف Done.
+- `docs/ux/rtl-design-spec-fa.md`: قرارداد RTL، دسترس‌پذیری و Design System.
+- `docs/operations/cpanel-deployment-fa.md`: نصب، Cron، بکاپ و ارتقا روی cPanel.
+- `docs/adr/`: تصمیم‌های معماری ثبت‌شده.
 
-## Code of Conduct
+## قواعد محصول
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+هر کلینیک یک Tenant مستقل است. دادهٔ Tenant از ورودی خام کاربر resolve نمی‌شود و باید از Context معتبر، عضویت یا Support Access سوپرادمین به‌دست آید. حذف پیش‌فرض بایگانی است. دسترسی‌های View/Create/Edit/Archive/Print/Export در سمت سرور Policy می‌شوند و UI فقط بازتاب آن‌ها است.
 
-## Security Vulnerabilities
+## امنیت و استقرار
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+در تولید HTTPS اجباری است. `.env`، کلیدها، Log و فایل‌های پزشکی نباید در Git یا public قرار گیرند. پیش از هر ارتقا باید بکاپ کامل گرفته شود و شکست Migration باید مسیر بازیابی داشته باشد. جزئیات خطای فنی به بیمار یا کارمند نمایش داده نمی‌شود و فقط کد پیگیری فارسی ارائه می‌گردد.
 
-## License
+## مالکیت و برند
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+برند محصول در تنظیمات سوپرادمین قابل تغییر است. نام مالک اعلام‌شدهٔ پروژه، شرکت Disweb با نشانی `disweb.ir` است. مجوز وابستگی‌ها و دارایی‌های فونت باید در تحویل نهایی مستند شوند.
