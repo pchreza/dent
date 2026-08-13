@@ -132,6 +132,13 @@
                             </div>
                         @endif
 
+                        @if ($authorization->allows(auth()->user(), 'reports.view'))
+                            <div class="sidebar__group">
+                                <span class="sidebar__group-title">گزارش و تحلیل</span>
+                                <a class="{{ $navClass(['reports.*']) }}" href="{{ route('reports.index') }}"><span><x-ui.icon name="dashboard" size="18" /> گزارش‌ها</span></a>
+                            </div>
+                        @endif
+
                         <div class="sidebar__group">
                             <span class="sidebar__group-title">مدیریت کلینیک</span>
                             @if ($canViewBranches)

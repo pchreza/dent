@@ -1,5 +1,15 @@
 # تغییرات نسخهٔ آزمایشی
 
+## نسخهٔ 0.7.0 — 2026-08-13
+
+مرکز گزارش و خروجی‌گیری Tenant-scoped اضافه شد. کارکنان دارای دسترسی لازم اکنون پنج گزارش اصلی بیماران، نوبت‌ها، طرح‌های درمان، مالی و خدمات را در مسیر `/clinic/reports` با فیلترهای تاریخ شمسی، وضعیت، شعبه، پزشک، خدمت، روش پرداخت و جست‌وجوی بیمار مشاهده می‌کنند.
+
+هر گزارش KPIهای عملیاتی، جدول RTL، empty state، چاپ print-friendly و CSV UTF-8 با header فارسی دارد. CSV به‌صورت streaming تولید می‌شود، سقف ۵۰۰۰ ردیف دارد و در برابر CSV formula injection محافظت می‌شود. مسیر مشاهده به `reports.view` و مجوز ماژول داده نیاز دارد؛ export علاوه بر آن به `reports.export` نیازمند است. مشاهده، چاپ و export با Tenant و filterهای غیرحساس در Audit ثبت می‌شوند.
+
+Parser تاریخ شمسی برای فیلتر بازه با timezone `Asia/Tehran` اضافه و برای تاریخ نامعتبر پیام validation فارسی تعریف شد. گزارش‌ها از Queryهای Tenant-scoped، eager loading محدود و قرارداد دادهٔ فعلی patients، appointments، treatment plans، invoices و invoice items استفاده می‌کنند و هیچ migration جدیدی برای انتشار ۰.۷.۰ لازم نیست.
+
+QA فاز: ۵۰ تست و ۲۱۵ assertion در Quality Gate نهایی، Pint روی ۱۴۱ فایل، Composer validate/audit، Blade cache و Vite build موفق؛ به‌علاوهٔ تست‌های گزارش برای جداسازی Tenant، least-privilege، صحت KPI مالی/نوبت، CSV formula injection، چاپ و تاریخ شمسی؛ بازبینی مستقیم پنج گزارش، responsive authenticated در ۳۷۵ و ۷۶۸ پیکسل، بدون overflow افقی و Drawer keyboard/focus موفق. مستندات در `docs/product/phase-8-reports-plan-fa.md`، `docs/qa/reports-qa-checklist-fa.md` و `docs/qa/reports-visual-findings-fa.md` قرار دارند.
+
 ## نسخهٔ 0.6.0 — 2026-08-13
 
 فاز پورتال بیمار تکمیل شد. با تأیید درخواست ثبت‌نام QR، حساب کاربری بیمار، نقش `patient`، membership کلینیک و پیوند `patient_user` به‌صورت اتمیک ساخته می‌شوند و بیمار پس از ورود نقش‌محور به پورتال مستقل خودش هدایت می‌شود.

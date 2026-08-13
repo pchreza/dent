@@ -6,7 +6,9 @@
 
 ## قابلیت‌های نسخهٔ فعلی
 
-نسخهٔ فعلی **0.6.0** شامل تمام قابلیت‌های نسخهٔ 0.5.0، به‌علاوهٔ پورتال امن و read-only بیمار است. این پورتال فعال‌سازی حساب از جریان تأیید QR، ورود نقش‌محور، تغییر رمز اولیهٔ اجباری، جداسازی کامل از پنل کارکنان، انتخاب کلینیک برای بیماران چندکلینیکی و نمایش Tenant-scoped نوبت‌ها، طرح‌های درمان، فاکتورها و اعلان‌ها را فراهم می‌کند.
+نسخهٔ فعلی **0.7.0** شامل تمام قابلیت‌های نسخهٔ 0.6.0، به‌علاوهٔ مرکز گزارش و خروجی‌گیری Tenant-scoped است. پنج گزارش اصلی بیماران، نوبت‌ها، طرح‌های درمان، مالی و خدمات با فیلتر تاریخ شمسی، KPI، جدول RTL، چاپ و CSV امن در دسترس کارکنان قرار دارند. دسترسی گزارش بر اساس `reports.view`، مجوز ماژول داده و `reports.export` کنترل می‌شود و خروجی‌ها سقف ۵۰۰۰ ردیف دارند.
+
+نسخهٔ 0.6.0 شامل پورتال امن و read-only بیمار است. این پورتال فعال‌سازی حساب از جریان تأیید QR، ورود نقش‌محور، تغییر رمز اولیهٔ اجباری، جداسازی کامل از پنل کارکنان، انتخاب کلینیک برای بیماران چندکلینیکی و نمایش Tenant-scoped نوبت‌ها، طرح‌های درمان، فاکتورها و اعلان‌ها را فراهم می‌کند.
 
 نسخهٔ 0.5.0 شامل ویزارد نصب، احراز هویت موبایل/نام کاربری، سوپرادمین، جداسازی Tenant، مدیریت کلینیک و شعبه، مدیریت پزشک و منشی، نقش و مجوز، ثبت بیمار با QR و صف تأیید، پروندهٔ پایه، حساسیت و دارو، اعلان داخلی، تقویم هفتگی شمسی، نوبت‌دهی و کنترل هم‌پوشانی، مراحل و طرح درمان، فاکتور و پرداخت، Audit و تنظیم فونت پنل بود.
 
@@ -20,7 +22,7 @@
 
 مرجع بصری صرفاً برای الهام از ساختار پنل‌های مدیریتی مدرن استفاده می‌شود؛ هیچ کد، دارایی یا جزء دارای مجوز قالب تجاری در این مخزن کپی نمی‌شود. هر صفحهٔ جدید یا تغییر بعدی باید از همین Design System، CSS logical properties و QA RTL/Responsive تبعیت کند.
 
-فایل پزشکی، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، گزارش‌ساز پیشرفته، Queue تولیدی و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند. پورتال بیمار read-only در نسخهٔ 0.6.0 ارائه شده و قابلیت‌های تعاملی آیندهٔ بیمار در Backlog باقی می‌مانند.
+فایل پزشکی، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، گزارش‌ساز قابل تنظیم، Queue تولیدی، export پس‌زمینه و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند. مرکز گزارش ثابت MVP در نسخهٔ 0.7.0 ارائه شده و تحلیل پیشرفته، زمان‌بندی و گزارش‌ساز configurable در فازهای آینده باقی می‌مانند.
 
 ## فناوری و الزامات
 
@@ -118,7 +120,7 @@ php artisan optimize:clear
 php artisan view:cache
 ```
 
-بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard کارکنان، پورتال بیمار، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. برای این نسخه، migration جدول `patient_user` باید با `php artisan migrate --force` اجرا شود. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
+بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard کارکنان، پورتال بیمار، مرکز گزارش، CSV/چاپ، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. برای این نسخه migration جدیدی وجود ندارد؛ اجرای معمول `php artisan migrate --force` برای اطمینان از وضعیت schema توصیه می‌شود. دسترسی مرکز گزارش از `clinic/reports` آغاز می‌شود. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
 
 ## توسعه و تست
 
@@ -134,7 +136,7 @@ pnpm run build
 git diff --check
 ```
 
-هر فاز فقط پس از تست، رفع خطا، Regression و گزارش QA قابل قبول است. برای فاز پورتال بیمار، چک‌لیست [`docs/qa/patient-portal-qa-checklist-fa.md`](docs/qa/patient-portal-qa-checklist-fa.md) و گزارش بازبینی [`docs/qa/patient-portal-visual-findings-fa.md`](docs/qa/patient-portal-visual-findings-fa.md) معیار پذیرش هستند. برای بازبینی صفحهٔ وضعیت دندان‌ها، فهرست آخرین وضعیت، فرم ثبت سریع، پیش‌انتخاب دندان و سطح، پیوند طرح درمان و جدول تاریخچه باید بررسی شوند.
+هر فاز فقط پس از تست، رفع خطا، Regression و گزارش QA قابل قبول است. برای فاز گزارش‌ها، چک‌لیست [`docs/qa/reports-qa-checklist-fa.md`](docs/qa/reports-qa-checklist-fa.md)، گزارش بازبینی [`docs/qa/reports-visual-findings-fa.md`](docs/qa/reports-visual-findings-fa.md) و طراحی فنی [`docs/product/phase-8-reports-plan-fa.md`](docs/product/phase-8-reports-plan-fa.md) معیار پذیرش هستند. برای فاز پورتال بیمار نیز چک‌لیست [`docs/qa/patient-portal-qa-checklist-fa.md`](docs/qa/patient-portal-qa-checklist-fa.md) مرجع است. برای بازبینی صفحهٔ وضعیت دندان‌ها، فهرست آخرین وضعیت، فرم ثبت سریع، پیش‌انتخاب دندان و سطح، پیوند طرح درمان و جدول تاریخچه باید بررسی شوند.
 
 ## ساختار مستندات و سیاست انتشار
 

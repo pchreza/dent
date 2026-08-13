@@ -22,6 +22,7 @@ use App\Http\Controllers\PatientTenantSelectionController;
 use App\Http\Controllers\PlatformSettingsController;
 use App\Http\Controllers\PublicRegistrationController;
 use App\Http\Controllers\QrRegistrationRequestController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TreatmentPlanController;
 use App\Http\Controllers\TreatmentPlanItemController;
@@ -146,6 +147,20 @@ Route::middleware('installed')->group(function (): void {
         Route::prefix('clinic')->name('invoices.')->middleware('permission:finance.view')->group(function (): void {
             Route::get('/invoices', [InvoiceController::class, 'index'])->name('index');
             Route::get('/invoices/{invoiceId}', [InvoiceController::class, 'show'])->whereNumber('invoiceId')->name('show');
+        });
+
+        Route::prefix('clinic/reports')->name('reports.')->middleware('permission:reports.view')->group(function (): void {
+            Route::get('/', [ReportController::class, 'index'])->name('index');
+            Route::get('/{report}/print', [ReportController::class, 'print'])
+                ->whereIn('report', ['patients', 'appointments', 'treatments', 'finance', 'services'])
+                ->name('print');
+            Route::get('/{report}/export', [ReportController::class, 'export'])
+                ->whereIn('report', ['patients', 'appointments', 'treatments', 'finance', 'services'])
+                ->middleware('permission:reports.export')
+                ->name('export');
+            Route::get('/{report}', [ReportController::class, 'show'])
+                ->whereIn('report', ['patients', 'appointments', 'treatments', 'finance', 'services'])
+                ->name('show');
         });
 
         Route::prefix('clinic')->name('invoices.')->middleware('permission:finance.create')->group(function (): void {
