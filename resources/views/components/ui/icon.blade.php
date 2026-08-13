@@ -47,6 +47,9 @@
         @case('invoice')
             <path d="M6 2h9l3 3v17l-3-2-3 2-3-2-3 2V2Z" /><path d="M9 9h6M9 13h6M9 17h3" />
             @break
+        @case('download')
+            <path d="M12 3v12M7 10l5 5 5-5M5 21h14" />
+            @break
         @case('qr')
             <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2M18 14h2M14 18h6M14 20h2M18 16h2" />
             @break

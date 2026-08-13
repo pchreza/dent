@@ -45,6 +45,7 @@ final class PatientController extends Controller
                 'clinicalFieldValues.definition',
                 'treatmentPlans.items.stage',
                 'treatmentPlans.items.statusHistory',
+                'fileAssets' => fn ($query) => $query->whereNull('deleted_at')->with('uploader'),
             ])
             ->findOrFail($patientId);
         $clinicalFieldDefinitions = $tenant->clinicalFieldDefinitions()

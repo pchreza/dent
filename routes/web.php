@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DentalChartController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\MedicalFileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PatientClinicalFieldValueController;
 use App\Http\Controllers\PatientController;
@@ -105,6 +106,20 @@ Route::middleware('installed')->group(function (): void {
                 ->whereNumber('patientId')
                 ->middleware('permission:clinical.update')
                 ->name('clinical-fields.store');
+            Route::get('/patients/{patientId}/medical-files/{fileId}/download', [MedicalFileController::class, 'download'])
+                ->whereNumber('patientId')
+                ->whereNumber('fileId')
+                ->middleware('permission:clinical_files.view')
+                ->name('medical-files.download');
+            Route::post('/patients/{patientId}/medical-files', [MedicalFileController::class, 'store'])
+                ->whereNumber('patientId')
+                ->middleware('permission:clinical_files.create')
+                ->name('medical-files.store');
+            Route::delete('/patients/{patientId}/medical-files/{fileId}', [MedicalFileController::class, 'archive'])
+                ->whereNumber('patientId')
+                ->whereNumber('fileId')
+                ->middleware('permission:clinical_files.archive')
+                ->name('medical-files.archive');
         });
 
         Route::prefix('clinic')->name('dental-chart.')->middleware('permission:dentistry.view')->group(function (): void {

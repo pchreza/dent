@@ -6,7 +6,9 @@
 
 ## قابلیت‌های نسخهٔ فعلی
 
-نسخهٔ فعلی **0.7.0** شامل تمام قابلیت‌های نسخهٔ 0.6.0، به‌علاوهٔ مرکز گزارش و خروجی‌گیری Tenant-scoped است. پنج گزارش اصلی بیماران، نوبت‌ها، طرح‌های درمان، مالی و خدمات با فیلتر تاریخ شمسی، KPI، جدول RTL، چاپ و CSV امن در دسترس کارکنان قرار دارند. دسترسی گزارش بر اساس `reports.view`، مجوز ماژول داده و `reports.export` کنترل می‌شود و خروجی‌ها سقف ۵۰۰۰ ردیف دارند.
+نسخهٔ فعلی **0.8.0** شامل تمام قابلیت‌های نسخهٔ 0.7.0، به‌علاوهٔ مدیریت امن فایل‌های پزشکی بیمار است. کارکنان مجاز می‌توانند فایل‌های معتبر JPG/PNG تا سقف ۱ مگابایت را با دسته و عنوان به پرونده اضافه کنند؛ فایل‌ها در Disk خصوصی با نام UUID ذخیره می‌شوند، download عمومی ندارند، برای هر عملیات Audit ثبت می‌شود و archive نرم با کنترل Tenant و مجوز مستقل انجام می‌گیرد. مجوزهای `clinical_files.view`، `clinical_files.create` و `clinical_files.archive` در سطح سرور اعمال می‌شوند.
+
+نسخهٔ 0.7.0 شامل مرکز گزارش و خروجی‌گیری Tenant-scoped است. پنج گزارش اصلی بیماران، نوبت‌ها، طرح‌های درمان، مالی و خدمات با فیلتر تاریخ شمسی، KPI، جدول RTL، چاپ و CSV امن در دسترس کارکنان قرار دارند. دسترسی گزارش بر اساس `reports.view`، مجوز ماژول داده و `reports.export` کنترل می‌شود و خروجی‌ها سقف ۵۰۰۰ ردیف دارند.
 
 نسخهٔ 0.6.0 شامل پورتال امن و read-only بیمار است. این پورتال فعال‌سازی حساب از جریان تأیید QR، ورود نقش‌محور، تغییر رمز اولیهٔ اجباری، جداسازی کامل از پنل کارکنان، انتخاب کلینیک برای بیماران چندکلینیکی و نمایش Tenant-scoped نوبت‌ها، طرح‌های درمان، فاکتورها و اعلان‌ها را فراهم می‌کند.
 
@@ -22,7 +24,7 @@
 
 مرجع بصری صرفاً برای الهام از ساختار پنل‌های مدیریتی مدرن استفاده می‌شود؛ هیچ کد، دارایی یا جزء دارای مجوز قالب تجاری در این مخزن کپی نمی‌شود. هر صفحهٔ جدید یا تغییر بعدی باید از همین Design System، CSS logical properties و QA RTL/Responsive تبعیت کند.
 
-فایل پزشکی، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، گزارش‌ساز قابل تنظیم، Queue تولیدی، export پس‌زمینه و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند. مرکز گزارش ثابت MVP در نسخهٔ 0.7.0 ارائه شده و تحلیل پیشرفته، زمان‌بندی و گزارش‌ساز configurable در فازهای آینده باقی می‌مانند.
+پاک‌سازی EXIF، preview امن تصویر، retention job، اشتراک کنترل‌شده فایل با بیمار، consent، watermark، object storage/S3، antivirus scanning، نسخه‌نویسی، اتصال واقعی IPPanel/SMS، ایمیل، درگاه پرداخت، گزارش‌ساز قابل تنظیم، Queue تولیدی، export پس‌زمینه و Upgrade Center در Backlog نسخه‌های بعدی قرار دارند. مدیریت امن فایل پزشکی MVP در نسخهٔ 0.8.0 ارائه شده و قابلیت‌های اشتراک فایل با بیمار عمداً تا تکمیل policy و consent به آینده موکول شده‌اند.
 
 ## فناوری و الزامات
 
@@ -120,7 +122,7 @@ php artisan optimize:clear
 php artisan view:cache
 ```
 
-بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard کارکنان، پورتال بیمار، مرکز گزارش، CSV/چاپ، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. برای این نسخه migration جدیدی وجود ندارد؛ اجرای معمول `php artisan migrate --force` برای اطمینان از وضعیت schema توصیه می‌شود. دسترسی مرکز گزارش از `clinic/reports` آغاز می‌شود. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
+بدون SSH این فرمان‌ها باید از Composer Manager، Terminal داخلی یا توسط پشتیبانی هاست اجرا شوند. اجرای Migration با فایل PHP عمومی مجاز نیست. بعد از ارتقا Login، Dashboard کارکنان، پورتال بیمار، مرکز گزارش، پروندهٔ بیمار و کارت فایل‌های پزشکی، CSV/چاپ، QR، بیماران، تقویم و فاکتور را Smoke Test کنید. این نسخه migration جدید `file_assets` و مجوزهای `clinical_files.*` دارد؛ پس از backup، `php artisan migrate --force` و seed/تنظیم مجوزهای نقش‌ها باید اجرا شود. مدیریت فایل از صفحهٔ پروندهٔ بیمار و routeهای `clinic/patients/{patientId}/medical-files` انجام می‌شود. جزئیات در [`docs/operations/cpanel-deployment-fa.md`](docs/operations/cpanel-deployment-fa.md) و [`docs/operations/cpanel-no-ssh-fa.md`](docs/operations/cpanel-no-ssh-fa.md) ثبت شده است.
 
 ## توسعه و تست
 
@@ -136,7 +138,7 @@ pnpm run build
 git diff --check
 ```
 
-هر فاز فقط پس از تست، رفع خطا، Regression و گزارش QA قابل قبول است. برای فاز گزارش‌ها، چک‌لیست [`docs/qa/reports-qa-checklist-fa.md`](docs/qa/reports-qa-checklist-fa.md)، گزارش بازبینی [`docs/qa/reports-visual-findings-fa.md`](docs/qa/reports-visual-findings-fa.md) و طراحی فنی [`docs/product/phase-8-reports-plan-fa.md`](docs/product/phase-8-reports-plan-fa.md) معیار پذیرش هستند. برای فاز پورتال بیمار نیز چک‌لیست [`docs/qa/patient-portal-qa-checklist-fa.md`](docs/qa/patient-portal-qa-checklist-fa.md) مرجع است. برای بازبینی صفحهٔ وضعیت دندان‌ها، فهرست آخرین وضعیت، فرم ثبت سریع، پیش‌انتخاب دندان و سطح، پیوند طرح درمان و جدول تاریخچه باید بررسی شوند.
+هر فاز فقط پس از تست، رفع خطا، Regression و گزارش QA قابل قبول است. برای فاز فایل‌های پزشکی، چک‌لیست [`docs/qa/medical-files-qa-checklist-fa.md`](docs/qa/medical-files-qa-checklist-fa.md)، گزارش بازبینی [`docs/qa/medical-files-visual-findings-fa.md`](docs/qa/medical-files-visual-findings-fa.md) و طراحی فنی [`docs/product/phase-9-medical-files-plan-fa.md`](docs/product/phase-9-medical-files-plan-fa.md) معیار پذیرش هستند. برای فاز گزارش‌ها، چک‌لیست [`docs/qa/reports-qa-checklist-fa.md`](docs/qa/reports-qa-checklist-fa.md) و برای پورتال بیمار [`docs/qa/patient-portal-qa-checklist-fa.md`](docs/qa/patient-portal-qa-checklist-fa.md) مراجع regression هستند. برای بازبینی صفحهٔ وضعیت دندان‌ها، فهرست آخرین وضعیت، فرم ثبت سریع، پیش‌انتخاب دندان و سطح، پیوند طرح درمان و جدول تاریخچه باید بررسی شوند.
 
 ## ساختار مستندات و سیاست انتشار
 

@@ -61,7 +61,7 @@
 
 ## Backlog اولویت‌دار بعد از این نسخه
 
-پس از نسخهٔ ۰.۷.۰، اولویت نخست اتصال واقعی MySQL/cPanel و Smoke Test روی هاست است. مرکز گزارش ثابت MVP، پورتال بیمار، Custom Fields پرونده، نمودار دندان و طرح درمان آیتم‌محور در نسخه‌های منتشرشده قرار دارند. backlog بعدی شامل فایل‌های پزشکی با authorization دانلود، پیامک IPPanel با queue/idempotency، Email، درگاه پرداخت، Cron یادآوری، گزارش‌ساز configurable، export پس‌زمینه، backup/restore UI و تست بار کنترل‌شده است.
+پس از نسخهٔ ۰.۸.۰، اولویت نخست اتصال واقعی MySQL/cPanel و Smoke Test روی هاست است. مرکز گزارش ثابت MVP، پورتال بیمار، مدیریت امن فایل‌های پزشکی، Custom Fields پرونده، نمودار دندان و طرح درمان آیتم‌محور در نسخه‌های منتشرشده قرار دارند. backlog بعدی شامل پاک‌سازی EXIF، preview امن، retention job، اشتراک کنترل‌شده فایل با بیمار و consent، watermark، object storage/S3، antivirus scanning، پیامک IPPanel با queue/idempotency، Email، درگاه پرداخت، Cron یادآوری، گزارش‌ساز configurable، export پس‌زمینه، backup/restore UI و تست بار کنترل‌شده است.
 
 ## نتیجه
 

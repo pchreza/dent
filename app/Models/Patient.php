@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Patient extends Model
 {
@@ -77,6 +78,11 @@ class Patient extends Model
     public function treatmentPlans(): HasMany
     {
         return $this->hasMany(TreatmentPlan::class);
+    }
+
+    public function fileAssets(): MorphMany
+    {
+        return $this->morphMany(FileAsset::class, 'owner');
     }
 
     public function verifier(): BelongsTo

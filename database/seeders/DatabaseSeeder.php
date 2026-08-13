@@ -42,6 +42,9 @@ class DatabaseSeeder extends Seeder
             ['module' => 'clinical', 'action' => 'create', 'label' => 'ثبت سابقهٔ درمانی'],
             ['module' => 'clinical', 'action' => 'update', 'label' => 'ویرایش سابقهٔ درمانی'],
             ['module' => 'clinical', 'action' => 'view_private_notes', 'label' => 'مشاهدهٔ یادداشت خصوصی'],
+            ['module' => 'clinical_files', 'action' => 'view', 'label' => 'مشاهدهٔ فایل‌های پزشکی'],
+            ['module' => 'clinical_files', 'action' => 'create', 'label' => 'آپلود فایل پزشکی'],
+            ['module' => 'clinical_files', 'action' => 'archive', 'label' => 'بایگانی فایل پزشکی'],
             ['module' => 'dentistry', 'action' => 'view', 'label' => 'مشاهدهٔ نمودار دندان'],
             ['module' => 'dentistry', 'action' => 'update', 'label' => 'ویرایش نمودار دندان'],
             ['module' => 'treatments', 'action' => 'view', 'label' => 'مشاهدهٔ طرح درمان'],
@@ -73,7 +76,7 @@ class DatabaseSeeder extends Seeder
         $roles = [
             ['code' => 'superadmin', 'name' => 'سوپرادمین', 'permissions' => 'all'],
             ['code' => 'clinic_manager', 'name' => 'مدیر کلینیک', 'permissions' => 'all'],
-            ['code' => 'doctor', 'name' => 'پزشک', 'permissions' => ['patients.view', 'clinical.view', 'clinical.create', 'clinical.update', 'dentistry.view', 'dentistry.update', 'treatments.view', 'treatments.create', 'treatments.update', 'scheduling.view']],
+            ['code' => 'doctor', 'name' => 'پزشک', 'permissions' => ['patients.view', 'clinical.view', 'clinical.create', 'clinical.update', 'clinical_files.view', 'clinical_files.create', 'dentistry.view', 'dentistry.update', 'treatments.view', 'treatments.create', 'treatments.update', 'scheduling.view']],
             ['code' => 'receptionist', 'name' => 'منشی', 'permissions' => ['patients.view', 'patients.create', 'patients.update', 'patients.print', 'clinical.view', 'scheduling.view', 'scheduling.create', 'scheduling.update', 'scheduling.cancel', 'finance.view', 'finance.create', 'finance.print']],
             ['code' => 'patient', 'name' => 'بیمار', 'permissions' => ['scheduling.view', 'clinical.view', 'treatments.view', 'finance.view']],
         ];

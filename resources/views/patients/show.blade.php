@@ -4,6 +4,10 @@
 @php($canEditClinical = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'clinical.update'))
 @php($canViewDentalChart = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'dentistry.view'))
 @php($canUpdateTreatments = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'treatments.update'))
+@php($canViewMedicalFiles = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'clinical_files.view'))
+@php($canCreateMedicalFiles = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'clinical_files.create'))
+@php($canArchiveMedicalFiles = auth()->check() && app(\App\Support\AuthorizationService::class)->allows(auth()->user(), 'clinical_files.archive'))
+@php($medicalFileCategories = ['xray' => 'تصویر رادیولوژی', 'intraoral_photo' => 'تصویر داخل دهان', 'other' => 'سایر'])
 <div class="page-header">
     <div>
         <span class="eyebrow">{{ $tenant->name }} · پروندهٔ {{ $patient->patient_no }}</span>
@@ -81,6 +85,75 @@
                     @php($savedValue = data_get($clinicalFieldValues->get($definition->id)?->value, 'value'))
                     <div class="detail-row"><strong>{{ $definition->label }}</strong><span>{{ is_bool($savedValue) ? ($savedValue ? 'بله' : 'خیر') : ($savedValue ?: '—') }}</span></div>
                 @endforeach
+            </div>
+        @endif
+    </section>
+@endif
+
+@if ($canViewMedicalFiles || $canCreateMedicalFiles)
+    <section class="card medical-files-card" aria-labelledby="medical-files-title">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">اسناد حساس پرونده</span>
+                <h2 id="medical-files-title">فایل‌های پزشکی</h2>
+            </div>
+            <span class="status-badge status-badge--info">{{ $patient->fileAssets->count() }}</span>
+        </div>
+
+        @if ($canCreateMedicalFiles)
+            <form method="post" action="{{ route('patients.medical-files.store', ['patientId' => $patient->id]) }}" enctype="multipart/form-data" class="medical-files-form">
+                @csrf
+                <div class="field">
+                    <label for="medical-file">انتخاب فایل <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
+                    <input id="medical-file" name="file" type="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" required>
+                    <small>فقط JPG، JPEG یا PNG تا سقف ۱ مگابایت.</small>
+                    @error('file')<small class="field-error">{{ $message }}</small>@enderror
+                </div>
+                <div class="field">
+                    <label for="medical-file-category">دستهٔ فایل <span aria-hidden="true">*</span><span class="sr-only"> الزامی</span></label>
+                    <select id="medical-file-category" name="category" required>
+                        <option value="">انتخاب کنید</option>
+                        @foreach ($medicalFileCategories as $value => $label)
+                            <option value="{{ $value }}" @selected(old('category') === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    @error('category')<small class="field-error">{{ $message }}</small>@enderror
+                </div>
+                <div class="field">
+                    <label for="medical-file-title">عنوان اختیاری</label>
+                    <input id="medical-file-title" name="title" type="text" value="{{ old('title') }}" maxlength="120" placeholder="مثلاً رادیوگرافی اولیه">
+                    @error('title')<small class="field-error">{{ $message }}</small>@enderror
+                </div>
+                <button class="button button--primary" type="submit"><x-ui.icon name="check" size="17" /> ذخیرهٔ فایل</button>
+            </form>
+            <p class="medical-file-hint">فایل در فضای خصوصی ذخیره می‌شود و URL عمومی ندارد.</p>
+        @endif
+
+        @if ($canViewMedicalFiles)
+            <div class="medical-file-list">
+                @forelse ($patient->fileAssets as $asset)
+                    <article class="medical-file-row">
+                        <div class="medical-file-row__meta">
+                            <span class="medical-file-row__icon" aria-hidden="true"><x-ui.icon name="invoice" size="18" /></span>
+                            <div class="medical-file-row__text">
+                                <strong>{{ $asset->title() }}</strong>
+                                <small>{{ $medicalFileCategories[$asset->category] ?? 'فایل پزشکی' }} · {{ $asset->sizeInKilobytes() }} · {{ $asset->uploader?->name ?: 'کاربر سامانه' }} · <bdi dir="ltr">{{ $asset->created_at ? \App\Support\JalaliDate::format($asset->created_at) : '—' }}</bdi></small>
+                            </div>
+                        </div>
+                        <div class="medical-file-row__actions">
+                            <a class="button button--ghost button--small" href="{{ route('patients.medical-files.download', ['patientId' => $patient->id, 'fileId' => $asset->id]) }}"><x-ui.icon name="download" size="15" /> دریافت</a>
+                            @if ($canArchiveMedicalFiles)
+                                <form method="post" action="{{ route('patients.medical-files.archive', ['patientId' => $patient->id, 'fileId' => $asset->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="button button--danger button--small" type="submit">بایگانی</button>
+                                </form>
+                            @endif
+                        </div>
+                    </article>
+                @empty
+                    <div class="empty-state"><strong>فایل پزشکی ثبت نشده است.</strong><span>برای حفظ حریم خصوصی، فایل‌ها فقط داخل فضای خصوصی سامانه نگهداری می‌شوند.</span></div>
+                @endforelse
             </div>
         @endif
     </section>

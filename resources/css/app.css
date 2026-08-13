@@ -575,3 +575,26 @@ input:disabled, select:disabled, textarea:disabled { cursor: not-allowed; backgr
     .report-card { transition: none; }
     .report-card:hover, .report-card:focus-visible { transform: none; }
 }
+
+/* Medical files */
+.medical-files-card { margin-block: 1rem; }
+.medical-files-form { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(10rem, .7fr) minmax(0, 1fr) auto; gap: .75rem; align-items: end; padding: 1rem; background: var(--ui-surface-muted); border: 1px dashed var(--ui-border-strong); border-radius: var(--ui-radius-md); }
+.medical-files-form .field { min-width: 0; }
+.medical-files-form .button { white-space: nowrap; }
+.medical-file-list { display: grid; gap: .65rem; margin-block-start: 1rem; }
+.medical-file-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: center; padding: .9rem 1rem; background: var(--ui-surface); border: 1px solid var(--ui-border); border-radius: var(--ui-radius-md); }
+.medical-file-row__meta { display: flex; min-width: 0; align-items: center; gap: .7rem; }
+.medical-file-row__icon { display: grid; flex: 0 0 2.4rem; width: 2.4rem; height: 2.4rem; place-items: center; background: var(--ui-brand-50); border-radius: .7rem; color: var(--ui-brand-700); }
+.medical-file-row__text { min-width: 0; }
+.medical-file-row__text strong, .medical-file-row__text small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.medical-file-row__text strong { color: var(--ui-text); font-size: .86rem; }
+.medical-file-row__text small { margin-block-start: .15rem; color: var(--ui-text-muted); font-size: .72rem; }
+.medical-file-row__actions { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; justify-content: flex-end; }
+.medical-file-row__actions form { margin: 0; }
+.medical-file-hint { margin-block-start: .35rem; color: var(--ui-text-muted); font-size: .74rem; }
+@media (max-width: 900px) { .medical-files-form { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+    .medical-files-form { grid-template-columns: 1fr; }
+    .medical-file-row { grid-template-columns: 1fr; align-items: stretch; }
+    .medical-file-row__actions { justify-content: flex-start; }
+}

@@ -1,5 +1,17 @@
 # تغییرات نسخهٔ آزمایشی
 
+## نسخهٔ 0.8.0 — 2026-08-13
+
+مدیریت امن فایل‌های پزشکی به پروندهٔ بیمار اضافه شد. کاربران مجاز می‌توانند JPG/JPEG/PNG معتبر تا سقف ۱ مگابایت را با دستهٔ فایل و عنوان اختیاری upload کنند. فایل‌ها در Disk خصوصی `local` با path مبتنی بر Tenant، بیمار و UUID ذخیره می‌شوند و نام ورودی کاربر هرگز در path استفاده نمی‌شود.
+
+سه مجوز مستقل `clinical_files.view`، `clinical_files.create` و `clinical_files.archive` به seeder اضافه شد. مشاهده، upload، download و archive با middleware، FormRequest، Tenant فعال، مالک polymorphic از نوع Patient و Disk خصوصی کنترل می‌شوند. فایل‌های archived با `deleted_at` از فهرست و download خارج می‌شوند، اما حذف فیزیکی در این فاز انجام نمی‌شود تا سیاست retention آینده بتواند تصمیم‌گیری کند.
+
+validation سرور نوع واقعی image، extension allowlist، حجم، محتوای image و category را کنترل می‌کند. metadata شامل نام پاک‌سازی‌شده، عنوان، ابعاد و checksum است. رخدادهای `medical_file.uploaded`, `medical_file.downloaded` و `medical_file.archived` با AuditLogger ثبت می‌شوند. فایل در public disk یا URL عمومی منتشر نمی‌شود و download با `nosniff` و Stream خصوصی انجام می‌گیرد.
+
+یک خطای wiring موجود در `routes/web.php` نیز در همین فاز اصلاح شد: import فراموش‌شدهٔ `InstallController` که `route:list` را با ReflectionException متوقف می‌کرد، اضافه شد.
+
+QA فاز: ۵۵ تست و ۲۵۷ assertion، Pint روی ۱۴۷ فایل، Composer validate/audit، Blade view cache، Vite build و `git diff --check` موفق. تست‌های امنیتی MIME جعلی، PDF، حجم بزرگ، IDOR Tenant، least-privilege، archive، download و Audit موفق بودند. بازبینی پروندهٔ بیمار، migration محلی، responsive authenticated در ۳۷۵ و ۷۶۸ پیکسل بدون overflow افقی و Drawer keyboard/focus موفق شد. مستندات در `docs/product/phase-9-medical-files-plan-fa.md`، `docs/qa/medical-files-qa-checklist-fa.md` و `docs/qa/medical-files-visual-findings-fa.md` قرار دارند.
+
 ## نسخهٔ 0.7.0 — 2026-08-13
 
 مرکز گزارش و خروجی‌گیری Tenant-scoped اضافه شد. کارکنان دارای دسترسی لازم اکنون پنج گزارش اصلی بیماران، نوبت‌ها، طرح‌های درمان، مالی و خدمات را در مسیر `/clinic/reports` با فیلترهای تاریخ شمسی، وضعیت، شعبه، پزشک، خدمت، روش پرداخت و جست‌وجوی بیمار مشاهده می‌کنند.
